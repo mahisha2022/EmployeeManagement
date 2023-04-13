@@ -40,11 +40,14 @@ public class EmployeeService {
      */
 
     public Employee createEmployee(Employee employee){
-        if(employeeRepository.findByEmail(employee.getEmail())){
+        Employee existedEmployee = employeeRepository.findByEmail(employee.getEmail());
+        if(existedEmployee != null){
             throw new UsernameAlreadyExistsException("Email " + employee.getEmail() + " already exists");
         }
         else {
-          return   employeeRepository.save(employee);
+            Employee newEmployee = employeeRepository.save(employee);
+            return newEmployee;
+
         }
 
     }
