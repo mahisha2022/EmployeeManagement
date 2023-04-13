@@ -11,17 +11,25 @@ import java.util.List;
 @EqualsAndHashCode
 @AllArgsConstructor
 @NoArgsConstructor
+
 public class Employee {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column
     private String firstName;
+    @Column
     private String lastName;
+    @Column
     private String email;
+    @Column
     private  String password;
+    @Column
     private String phoneNumber;
+    @Column
     private boolean isManager;
+    @Column
     private Long managerId;
 
     @OneToMany(fetch = FetchType.EAGER)
