@@ -28,14 +28,7 @@ public class LeaveController {
 
     @PostMapping("/request/{employeeId}")
     public ResponseEntity<Leave> leaveRequest(@RequestBody Leave leave,  @PathVariable long employeeId) {
-//        try {
-//            Employee employee = new Employee();
-//            employee.setId(employeeId);
-//            Leave requestedLeave = leaveService.requestLeave(leave, employee);
-//            return ResponseEntity.ok("Leave request submitted!");
-//        } catch (InvalidCredential e) {
-//            return ResponseEntity.badRequest().body("Employee not found!");
-//        }
+
         Leave savedLeave = leaveService.requestLeave(leave, employeeId);
         return new ResponseEntity<>(savedLeave, HttpStatus.CREATED);
     }
@@ -67,7 +60,12 @@ public class LeaveController {
         return ResponseEntity.ok().body(leaves);
     }
 
-
+    /**
+     * cancel leave by id
+     * Endpoint DELETE localhost:9000/leaves/{leaveId}
+     * @param leaveId
+     * @return
+     */
 
         @DeleteMapping("/{leaveId}")
     public ResponseEntity<String> cancelLeave(@PathVariable long leaveId){
@@ -81,9 +79,22 @@ public class LeaveController {
 
         }
 
+    /**
+     * get Leave by Manager
+     * Endpoint GET localhost:9000/leaves/manager/{managerId}
+     * @param managerId
+     * @return
+     */
 
-//        @PatchMapping("/{leaveId")
-//        public ResponseEntity<Leave>
+    @GetMapping("/manager/{managerId}")
+    public ResponseEntity<List<Leave>> getLeaveByManager(@PathVariable Long managerId){
+        List<Leave> leaves = leaveService.getLeaveRequestByManager(managerId);
+        if(leaves.isEmpty()){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(leaves, HttpStatus.OK);
+    }
+
 
 
 

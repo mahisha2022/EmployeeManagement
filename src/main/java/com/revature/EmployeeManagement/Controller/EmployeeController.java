@@ -24,6 +24,11 @@ public class EmployeeController {
         this.employeeService = employeeService;
     }
 
+    /**
+     * Register new employee
+     * @param employee
+     * @return
+     */
     @PostMapping("/register")
     public ResponseEntity<String> postEmployee(@RequestBody Employee employee){
         try {
@@ -33,6 +38,13 @@ public class EmployeeController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
+
+    /**
+     * login into existed account
+     * Endpoint POST localhost:9000/revWorkforce/login
+     * @param employee
+     * @return
+     */
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody Employee employee ){
@@ -44,27 +56,62 @@ public class EmployeeController {
         }
     }
 
+    /**
+     * getEmployee by Id
+     * Endpoint GET localhost:9000/revWorkforce/employee/{id}
+     * @param employeeId
+     * @return
+     */
+
     @GetMapping("/employee/{employeeId}")
     public Optional<Employee> getEmployeeById(@PathVariable long employeeId){
         return employeeService.getEmployeeById(employeeId);
 
     }
 
+    /**
+     * get Employee by manager
+     * Endpoint GET localhost:9000/revWorkforce/employee/manager/{managerId}
+     * @param managerId
+     * @return
+     */
+
     @GetMapping("/employee/manager/{managerId}")
     public List<Employee> getEmployeeByManager(@PathVariable long managerId){
         return employeeService.getEmployeeByManager(managerId);
     }
+
+    /**
+     * get All Employees
+     * Endpoint GET localhost:9000/revWorkforce/employee
+     * @return
+     */
 
     @GetMapping("/employees")
     public List<Employee> getAllEmployees(){
         return employeeService.getAllEmployee();
     }
 
+
+    /**
+     * get manager by it's employee id
+     * Endpoint GET localhost:9000/revWorkforce/manager/{managerId}
+     * @param id
+     * @return
+     */
     @GetMapping("/manager/{id}")
     public ResponseEntity<Employee> getManagerById(@PathVariable Long id ){
         Employee manager = employeeService.getManagerById(id);
         return new ResponseEntity<>(manager, HttpStatus.OK);
     }
+
+    /**
+     * Update employee by it's id
+     * Endpoint PATCH localhost:9000/revWorkforce/employee/{id}
+     * @param id
+     * @param employee
+     * @return
+     */
 
 
     @PatchMapping("/employee/{id}")
@@ -74,6 +121,11 @@ public class EmployeeController {
     }
 
 
+    /**
+     * Custom exception handler for unavailable resources
+     * @param e
+     * @return
+     */
 
     @ExceptionHandler(InvalidCredential.class)
     public ResponseEntity<String > handleResourceNotFoundExceptions(InvalidCredential e){
