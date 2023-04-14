@@ -1,0 +1,1 @@
+INSERT INTO holiday ( ) VALUE ('Jan 01', 'Sunday', 'New Year''s Day', 'Federal Holiday');
