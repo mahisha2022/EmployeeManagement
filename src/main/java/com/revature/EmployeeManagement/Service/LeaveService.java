@@ -39,33 +39,19 @@ public class LeaveService {
         return leaveRepository.findByEmployee(employee);
     }
 
-    public Leave requestLeave(Leave leave, long employeeId){
-        //Find employee making the leave request
-        Optional<Employee> employee1 = employeeRepository.findById(employeeId);
-            if(employee1 == null){
-                throw new InvalidCredential("Employee not Found");
-            }
-            //Create new leave request
-            Leave newLeave = new Leave();
-//            newLeave.setEmployee(employeeId);
-            newLeave.setStartDate(leave.getStartDate());
-            newLeave.setEndDate(leave.getEndDate());
-            newLeave.setStatus("Submitted");
-            newLeave.setNotes(leave.getNotes());
-            newLeave.setLeaveType(leave.getLeaveType());
+    public Leave requestLeave(Leave leave, long employeeId) {
+        Employee employee = employeeRepository.findById(employeeId).get();
+        leave.setEmployee(employee);
+        Leave newLeave = leaveRepository.save(leave);
+        newLeave.setEmployeeId(employeeId);
+        newLeave.setStatus("Submitted");
+        return newLeave;
 
 
-            //Notify the manager about the employees requested leave
-//       Optional<Employee> manager = employeeRepository.findManagerByEmployee(employee.getId());
-//        if (manager != null){
-//            notificationService.leaveRequestNotification(employee, employee , leave);
-//        }
-    return leave;
-        }
+        //Notify Manager here
 
-        //set the leave status default value pending
-//        leave.setStatus("Submitted");
-//       return leaveRepository.save(leave);
+
+    }
 
 
     public void cancelLeave(long id){
