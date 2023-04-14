@@ -1,6 +1,7 @@
 package com.revature.EmployeeManagement.Controller;
 
 import com.revature.EmployeeManagement.EmployeeManagementApplication;
+import com.revature.EmployeeManagement.Exception.InvalidCredential;
 import com.revature.EmployeeManagement.Exception.UserNotFoundException;
 import com.revature.EmployeeManagement.Model.Employee;
 import com.revature.EmployeeManagement.Service.EmployeeService;
@@ -22,8 +23,16 @@ public class EmployeeController {
     }
 
     @PostMapping("/register")
-    public Employee postEmployee(@RequestBody Employee employee){
-        return employeeService.createEmployee(employee);
+//    public Employee postEmployee(@RequestBody Employee employee){
+//        return employeeService.createEmployee(employee);
+//    }
+    public ResponseEntity<String> postEmployee(@RequestBody Employee employee){
+        try {
+            employeeService.createEmployee(employee);
+            return ResponseEntity.ok("Employee registered successfully");
+        }catch (InvalidCredential e){
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     @PostMapping("/login")

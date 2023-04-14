@@ -2,11 +2,13 @@ package com.revature.EmployeeManagement.Service;
 
 
 import com.revature.EmployeeManagement.Exception.UserNotFoundException;
-import com.revature.EmployeeManagement.Exception.UsernameAlreadyExistsException;
+import com.revature.EmployeeManagement.Exception.InvalidCredential;
 import com.revature.EmployeeManagement.Model.Employee;
 import com.revature.EmployeeManagement.Model.Leave;
 import com.revature.EmployeeManagement.Repositoty.EmployeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -27,10 +29,12 @@ public class EmployeeService {
 
     private EmployeeRepository employeeRepository;
     private List<Leave> leaves;
+    PasswordEncoder passwordEncoder;
     @Autowired
     public EmployeeService(EmployeeRepository employeeRepository){
         this.employeeRepository = employeeRepository;
         leaves = new ArrayList<>();
+        this.passwordEncoder = new BCryptPasswordEncoder();
     }
 
     /**
@@ -39,18 +43,31 @@ public class EmployeeService {
      * @return
      */
 
-    public Employee createEmployee(Employee employee){
+    public Employee createEmployee(Employee employee) throws InvalidCredential {
+
+        //Check if email is already exists
         Employee existedEmployee = employeeRepository.findByEmail(employee.getEmail());
         if(existedEmployee != null){
-            throw new UsernameAlreadyExistsException("Email " + employee.getEmail() + " already exists");
+            throw new InvalidCredential("Email " + employee.getEmail() + " already exists");
         }
-        else {
-            Employee newEmployee = employeeRepository.save(employee);
-            return newEmployee;
+        //check if employee email and password meet the requirements
+        String email = employee.getEmail();
+        String password = employee.getPassword();
+
+        if(!email.matches("^.+@.+$")){
+            throw  new InvalidCredential("Invalid email format");
+        }
+        if (password.length() < 6 || !password.matches(".*[a-zA-Z].*")){
+            throw new InvalidCredential("Password must be at least 6 characters long and must contain letters");
+        }
+       //If all requirement pass, save the employee and encode the password
+//            String encodedPassword = this.passwordEncoder.encode(employee.getPassword());
+//            employee.setEmail(encodedPassword);
+            return employeeRepository.save(employee);
 
         }
 
-    }
+
 
     /**
      * employee login with email and password
@@ -64,8 +81,14 @@ public class EmployeeService {
             if(employee == null) {
                 throw new UserNotFoundException("User with email " + email + " not found!");
             }
-          employee.setEmail(email);
+            employee.setEmail(email);
             employee.setPassword(password);
+//            String encodedPassword = employee.getPassword();
+//            return employee;
+//            if(!this.passwordEncoder.matches(password.trim(), encodedPassword)){
+//                throw new InvalidCredential("Invalid Password");
+//            }
+
             return employee;
         }
 
