@@ -67,11 +67,20 @@ public class EmployeeController {
     }
 
 
+    @PatchMapping("/employee/{id}")
+    public ResponseEntity<Employee> updateEmployee(@PathVariable long id, @RequestBody Employee employee){
+        Employee updatedEmployee = employeeService.updateEmployeeById(id, employee);
+        return new ResponseEntity<>(updatedEmployee, HttpStatus.OK);
+    }
+
+
 
     @ExceptionHandler(InvalidCredential.class)
     public ResponseEntity<String > handleResourceNotFoundExceptions(InvalidCredential e){
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body("The requested resource not Found");
     }
+
+
 
 
 

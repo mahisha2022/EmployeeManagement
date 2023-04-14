@@ -19,10 +19,15 @@ import java.util.Optional;
 public class LeaveController {
 
     LeaveService leaveService;
+    EmployeeService employeeService;
+
 
     EmployeeService employeeService;
 
     public LeaveController(LeaveService leaveService) {
+    
+    public LeaveController(LeaveService leaveService, EmployeeService employeeService) {
+    
         this.leaveService = leaveService;
         this.employeeService = employeeService;
     }
@@ -61,12 +66,14 @@ public class LeaveController {
     @GetMapping("/{employeeId}")
     public ResponseEntity<List<Leave>> getLeaveByEmployee(@PathVariable long employeeId) {
         Optional<Employee> employeeOptional = employeeService.getEmployeeById(employeeId);
-            if (employeeOptional.isEmpty()) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-            }
-        List<Leave> leaves = leaveService.getLeavesByEmployeeId(employeeOptional.get());
-            return ResponseEntity.ok().body(leaves);
+        if (employeeOptional.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
+        List<Leave> leaves = leaveService.getLeavesByEmployeeId(employeeOptional.get());
+        return ResponseEntity.ok().body(leaves);
+    }
+
+
 
         @DeleteMapping("/{leaveId}")
     public ResponseEntity<String> cancelLeave(@PathVariable long leaveId){
@@ -79,5 +86,19 @@ public class LeaveController {
 
 
         }
+
+
+//        @PatchMapping("/{leaveId")
+//        public ResponseEntity<Leave>
+
+
+
+    @ExceptionHandler(InvalidCredential.class)
+    public ResponseEntity<String > handleResourceNotFoundExceptions(InvalidCredential e){
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("The requested resource not Found");
+    }
+
+
+
 
 }
