@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class EmployeeService {
@@ -60,9 +59,6 @@ public class EmployeeService {
         }
         if (password.length() < 6 || !password.matches(".*[a-zA-Z].*")){
             throw new InvalidCredential("Password must be at least 6 characters long and must contain letters");
-        }
-        if (employee.getIsManager() !=1) {
-            employee.setIsManager(0);
         }
        //If all requirement pass, save the employee and encode the password
 //            String encodedPassword = this.passwordEncoder.encode(employee.getPassword());
@@ -120,8 +116,4 @@ public class EmployeeService {
     }
 
 
-    public Optional<Employee> getEmployeeById(long employeeId) {
-
-        return employeeRepository.findById(employeeId);
-    }
 }
