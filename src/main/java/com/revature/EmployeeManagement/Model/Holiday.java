@@ -2,6 +2,7 @@ package com.revature.EmployeeManagement.Model;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.query.sql.internal.ParameterRecognizerImpl;
 
 import java.time.LocalDate;
 import java.util.Date;
@@ -18,7 +19,13 @@ public class Holiday {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column
-    private LocalDate date;
+    private String dates;
+    @Column
+    private String days;
     @Column
     private String name;
+    @Column
+    private String type;
+
+
 }

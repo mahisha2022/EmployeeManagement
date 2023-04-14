@@ -73,4 +73,18 @@ public class LeaveController {
 
         }
 
+
+//        @PatchMapping("/{leaveId")
+//        public ResponseEntity<Leave>
+
+
+
+    @ExceptionHandler(InvalidCredential.class)
+    public ResponseEntity<String > handleResourceNotFoundExceptions(InvalidCredential e){
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("The requested resource not Found");
+    }
+
+
+
+
 }
