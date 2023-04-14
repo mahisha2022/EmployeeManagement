@@ -35,9 +35,22 @@ public class LeaveService {
         return leaveRepository.findAll();
     }
 
+    /**
+     * get all leaves by Employee id
+     * @param employee
+     * @return
+     */
+
     public List<Leave> getLeavesByEmployeeId(Employee employee){
         return leaveRepository.findByEmployee(employee);
     }
+
+    /**
+     * request leave by employee id
+     * @param leave
+     * @param employeeId
+     * @return
+     */
 
     public Leave requestLeave(Leave leave, long employeeId) {
         Employee employee = employeeRepository.findById(employeeId).get();
@@ -53,6 +66,11 @@ public class LeaveService {
 
     }
 
+    /**
+     * Cancel/delete requested leave
+     * @param id
+     */
+
 
     public void cancelLeave(long id){
         Optional<Leave> leaveOptional = leaveRepository.findById(id);
@@ -64,6 +82,13 @@ public class LeaveService {
         }
 
     }
+
+    /**
+     * update requested leave only if its not approved or rejected
+     * @param id
+     * @param updatedLeave
+     * @return
+     */
 
     public Leave updateLeave(Long id, Leave updatedLeave){
         Leave leave = leaveRepository.findById(id).get();
@@ -79,6 +104,12 @@ public class LeaveService {
        return leave;
     }
 
+    /**
+     * Approve submitted leave request
+     * @param leave
+     * @return
+     */
+
     public Leave approveLeave(Leave leave){
         Leave submittedLeave = leaveRepository.findById(leave.getId()).get();
         if(leave.getStatus().equals("Submitted")){
@@ -90,6 +121,12 @@ public class LeaveService {
         return leave;
     }
 
+    /**
+     * Reject submitted leave request
+     * @param leave
+     * @return
+     */
+
     public Leave rejectLeave(Leave leave){
         Leave submittedLeave = leaveRepository.findById(leave.getId()).get();
         if(submittedLeave.getStatus().equals("Submitted")){
@@ -97,6 +134,10 @@ public class LeaveService {
             leaveRepository.save(leave);
         }
         return leave;
+    }
+
+    public List<Leave> getLeaveRequestByManager(Long managerId){
+        return leaveRepository.findByEmployee_ManagerId(managerId);
     }
 
 
