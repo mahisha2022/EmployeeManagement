@@ -3,10 +3,14 @@ package com.revature.EmployeeManagement.Controller;
 import com.revature.EmployeeManagement.Exception.InvalidCredential;
 import com.revature.EmployeeManagement.Model.Employee;
 import com.revature.EmployeeManagement.Model.Leave;
+import com.revature.EmployeeManagement.Service.EmployeeService;
 import com.revature.EmployeeManagement.Service.LeaveService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Optional;
 
 @RestController
 @CrossOrigin("*")
@@ -15,9 +19,11 @@ import org.springframework.web.bind.annotation.*;
 public class LeaveController {
 
     LeaveService leaveService;
+    EmployeeService employeeService;
 
-    public LeaveController(LeaveService leaveService) {
+    public LeaveController(LeaveService leaveService, EmployeeService employeeService) {
         this.leaveService = leaveService;
+        this.employeeService = employeeService;
     }
 
     @PostMapping("/request/{employeeId}")
@@ -54,12 +60,14 @@ public class LeaveController {
     @GetMapping("/{employeeId}")
     public ResponseEntity<List<Leave>> getLeaveByEmployee(@PathVariable long employeeId) {
         Optional<Employee> employeeOptional = employeeService.getEmployeeById(employeeId);
-            if (employeeOptional.isEmpty()) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-            }
-        List<Leave> leaves = leaveService.getLeavesByEmployeeId(employeeOptional.get());
-            return ResponseEntity.ok().body(leaves);
+        if (employeeOptional.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
+        List<Leave> leaves = leaveService.getLeavesByEmployeeId(employeeOptional.get());
+        return ResponseEntity.ok().body(leaves);
+    }
+
+
 
         @DeleteMapping("/{leaveId}")
     public ResponseEntity<String> cancelLeave(@PathVariable long leaveId){
