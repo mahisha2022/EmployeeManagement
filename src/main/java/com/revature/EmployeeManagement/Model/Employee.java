@@ -29,7 +29,7 @@ public class Employee {
     @Column
     private String phoneNumber;
     @Column
-    private boolean isManager;
+    private int isManager;
     @Column
     private Long managerId;
     @Column

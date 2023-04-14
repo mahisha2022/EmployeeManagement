@@ -60,6 +60,9 @@ public class EmployeeService {
         if (password.length() < 6 || !password.matches(".*[a-zA-Z].*")){
             throw new InvalidCredential("Password must be at least 6 characters long and must contain letters");
         }
+        if (employee.getIsManager() !=1) {
+            employee.setIsManager(0);
+        }
        //If all requirement pass, save the employee and encode the password
 //            String encodedPassword = this.passwordEncoder.encode(employee.getPassword());
 //            employee.setEmail(encodedPassword);
