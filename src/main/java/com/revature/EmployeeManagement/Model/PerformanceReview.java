@@ -1,10 +1,7 @@
 package com.revature.EmployeeManagement.Model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
@@ -17,7 +14,8 @@ import lombok.*;
 public class PerformanceReview {
 
     @Id
-    Long id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    Long reviewNumber;
     private String deliverables;
     private String achievements;
     private String areaOfImprovement;

@@ -5,6 +5,7 @@ import com.revature.EmployeeManagement.Model.Leave;
 import com.revature.EmployeeManagement.Model.Notification;
 import com.revature.EmployeeManagement.Repositoty.EmployeeRepository;
 import com.revature.EmployeeManagement.Repositoty.NotificationRepository;
+import com.revature.EmployeeManagement.Repositoty.LeaveRepository;
 import org.aspectj.weaver.ast.Not;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,6 +20,7 @@ public class NotificationService {
     @Autowired
     private EmployeeRepository employeeRepository;
 
+
     public Notification sendNotification(Notification notification, Employee employee){
         Optional<Employee> employeeOptional = employeeRepository.findManagerByEmployee(employee.getId());
         Notification newNotification = new Notification();
@@ -27,7 +29,7 @@ public class NotificationService {
         return notificationRepository.save(notification);
     }
 
-    public Notification leaveRequestNotification(Employee manager, Employee employee, Leave leave) {
+    public Notification leaveRequestNotification(Employee employee, Leave leave) {
 
         String message = "Employee " + employee.getFirstName() + " has requested leave from " +
                 " to " + leave.getStartDate() + leave.getEndDate();
@@ -36,4 +38,8 @@ public class NotificationService {
 
         return notificationRepository.save(notification);
     }
+
+
+
+
 }
