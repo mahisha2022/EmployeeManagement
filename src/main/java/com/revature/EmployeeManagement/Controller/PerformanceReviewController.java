@@ -44,4 +44,38 @@ public class PerformanceReviewController {
         List<PerformanceReview> performanceReviews = performanceReviewService.getPerformanceReviewByEmployeeId(employee);
         return new ResponseEntity<>(performanceReviews, HttpStatus.OK);
     }
+    /*
+This method retrieves all reviews that have been written about every single employee
+     */
+    @GetMapping("/get/all")
+    public ResponseEntity<List<PerformanceReview>> getAllPerformanceReviews() {
+        List<PerformanceReview> performanceReviews = performanceReviewService.getAllPerformanceReviews();
+        return new ResponseEntity<>(performanceReviews, HttpStatus.OK);
+    }
+/*
+This method for update is not working correctly, although it is a start it is not properly updating
+ */
+    @PatchMapping("/update/{reviewId}")
+    public ResponseEntity<PerformanceReview> updatePerformanceReview(@RequestBody PerformanceReview performanceReview, @PathVariable long reviewId) {
+        performanceReview.setReviewNumber(reviewId);
+        PerformanceReview updatedPerformanceReview = performanceReviewService.updatePerformanceReview(performanceReview);
+        return new ResponseEntity<>(updatedPerformanceReview, HttpStatus.OK);
+    }
+    /*
+    This method deletes 1 review at a time
+     */
+    @DeleteMapping("/delete/{reviewId}")
+    public ResponseEntity<Void> deletePerformanceReview(@PathVariable long reviewId) {
+        performanceReviewService.deletePerformanceReviewById(reviewId);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+    /*
+      This method gets a review by its review id
+       */
+    @GetMapping("/get/review/{reviewId}")
+    public ResponseEntity<PerformanceReview> getPerformanceReviewById(@PathVariable long reviewId) {
+        PerformanceReview performanceReview = performanceReviewService.getPerformanceReviewById(reviewId);
+        return new ResponseEntity<>(performanceReview, HttpStatus.OK);
+    }
 }
+

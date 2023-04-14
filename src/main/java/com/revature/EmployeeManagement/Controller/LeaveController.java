@@ -3,10 +3,14 @@ package com.revature.EmployeeManagement.Controller;
 import com.revature.EmployeeManagement.Exception.InvalidCredential;
 import com.revature.EmployeeManagement.Model.Employee;
 import com.revature.EmployeeManagement.Model.Leave;
+import com.revature.EmployeeManagement.Service.EmployeeService;
 import com.revature.EmployeeManagement.Service.LeaveService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Optional;
 
 @RestController
 @CrossOrigin("*")
@@ -16,8 +20,11 @@ public class LeaveController {
 
     LeaveService leaveService;
 
+    EmployeeService employeeService;
+
     public LeaveController(LeaveService leaveService) {
         this.leaveService = leaveService;
+        this.employeeService = employeeService;
     }
 
     @PostMapping("/request/{employeeId}")
