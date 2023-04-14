@@ -124,4 +124,12 @@ public class EmployeeService {
 
         return employeeRepository.findById(employeeId);
     }
+
+    public List<Employee> getAllEmployee(){
+        return employeeRepository.findAll();
+    }
+
+    public Employee getManagerById(long managerId){
+        return employeeRepository.findByIsManager(managerId);
+    }
 }
