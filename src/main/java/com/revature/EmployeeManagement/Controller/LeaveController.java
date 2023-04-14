@@ -3,15 +3,10 @@ package com.revature.EmployeeManagement.Controller;
 import com.revature.EmployeeManagement.Exception.InvalidCredential;
 import com.revature.EmployeeManagement.Model.Employee;
 import com.revature.EmployeeManagement.Model.Leave;
-import com.revature.EmployeeManagement.Service.EmployeeService;
 import com.revature.EmployeeManagement.Service.LeaveService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-import java.util.Optional;
 
 @RestController
 @CrossOrigin("*")
@@ -20,37 +15,23 @@ import java.util.Optional;
 public class LeaveController {
 
     LeaveService leaveService;
-    EmployeeService employeeService;
 
-    @Autowired
-    public LeaveController(LeaveService leaveService, EmployeeService employeeService) {
+    public LeaveController(LeaveService leaveService) {
         this.leaveService = leaveService;
-        this.employeeService = employeeService;
     }
 
-    /**
-     * Endpoint for  POST localhost:9000/leaves/request/1 adds a new leave request for an existed employee with id 1
-     * {
-     *       "startDate": "2023-12-13",
-     *     "endDate": "2023-12-14",
-     *     "leaveType": "annual",
-     *      "notes": "n/a"
-     * }
-     * should add a new request for employeeid 1 and response with
-     * {
-     *     "id": 1,
-     *     "startDate": "2023-12-13",
-     *     "endDate": "2023-12-14",
-     *     "leaveType": "annual",
-     *     "status": "Submitted",
-     *     "notes": "n/a",
-     *     "employeeId": 1
-     * }
-     */
-
     @PostMapping("/request/{employeeId}")
-    public Leave leaveRequest(@RequestBody Leave leave, @PathVariable long employeeId) {
-        return leaveService.requestLeave(leave, employeeId);
+    public ResponseEntity<Leave> leaveRequest(@RequestBody Leave leave,  @PathVariable long employeeId) {
+//        try {
+//            Employee employee = new Employee();
+//            employee.setId(employeeId);
+//            Leave requestedLeave = leaveService.requestLeave(leave, employee);
+//            return ResponseEntity.ok("Leave request submitted!");
+//        } catch (InvalidCredential e) {
+//            return ResponseEntity.badRequest().body("Employee not found!");
+//        }
+        Leave savedLeave = leaveService.requestLeave(leave, employeeId);
+        return new ResponseEntity<>(savedLeave, HttpStatus.CREATED);
     }
 
 
@@ -91,6 +72,5 @@ public class LeaveController {
 
 
         }
-
 
 }
