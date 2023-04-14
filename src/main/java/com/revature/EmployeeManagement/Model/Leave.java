@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDate;
 import java.util.Date;
 @Entity
 @Data
@@ -18,8 +19,8 @@ public class Leave {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Date startDate;
-    private Date endDate;
+    private String startDate;
+    private String endDate;
     private String leaveType;
     private String status;
     private String notes;
@@ -27,4 +28,7 @@ public class Leave {
     @JsonBackReference
     @JoinColumn(name = "employeeId")
     private Employee employee;
+
+    @Column(name = "employeeId", insertable = false, updatable = false)
+    private long employeeId;
 }
