@@ -25,9 +25,6 @@ public class EmployeeController {
     }
 
     @PostMapping("/register")
-//    public Employee postEmployee(@RequestBody Employee employee){
-//        return employeeService.createEmployee(employee);
-//    }
     public ResponseEntity<String> postEmployee(@RequestBody Employee employee){
         try {
             employeeService.createEmployee(employee);
@@ -63,10 +60,18 @@ public class EmployeeController {
         return employeeService.getAllEmployee();
     }
 
-//    @GetMapping("/manager/{managerId}")
-//    public Employee getManagerById(@PathVariable long managerId){
-//        return employeeService.getManagerById(managerId);
-//    }
+    @GetMapping("/manager/{id}")
+    public ResponseEntity<Employee> getManagerById(@PathVariable Long id ){
+        Employee manager = employeeService.getManagerById(id);
+        return new ResponseEntity<>(manager, HttpStatus.OK);
+    }
+
+
+
+    @ExceptionHandler(InvalidCredential.class)
+    public ResponseEntity<String > handleResourceNotFoundExceptions(InvalidCredential e){
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("The requested resource not Found");
+    }
 
 
 
