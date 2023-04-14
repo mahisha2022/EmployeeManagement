@@ -68,14 +68,15 @@ public class LeaveService {
 //       return leaveRepository.save(leave);
 
 
-    public Leave cancelLeave(Long id){
-        Leave leave = leaveRepository.findById(id).get();
-        if(leave.getStatus() == "Submitted"){
-            leaveRepository.delete(leave);
-        } else {
-            throw new InvalidCredential("Leave cannot be cancelled, because it already approved or rejected");
+    public void cancelLeave(long id){
+        Optional<Leave> leaveOptional = leaveRepository.findById(id);
+        Leave leave = leaveOptional.get();
+        if(leave.getStatus().equals("Submitted")){
+           leaveRepository.delete(leave);
+        }else {
+            throw new InvalidCredential("Leave cannot be deleted, because it's approved or rejected");
         }
-        return leave;
+
     }
 
     public Leave updateLeave(Long id, Leave updatedLeave){

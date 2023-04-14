@@ -33,4 +33,44 @@ public class LeaveController {
         Leave savedLeave = leaveService.requestLeave(leave, employeeId);
         return new ResponseEntity<>(savedLeave, HttpStatus.CREATED);
     }
+
+
+    /**
+     * Endpoint for GET localhost/leaves/1 returns the list of leaves for employee with id 1
+     *
+     * [
+     *     {
+     *         "id": 1,
+     *         "startDate": "2023-12-13",
+     *         "endDate": "2023-12-14",
+     *         "leaveType": "annual",
+     *         "status": "Submitted",
+     *         "notes": "n/a",
+     *         "employeeId": 1
+     *     }
+     * ]
+     */
+
+    @GetMapping("/{employeeId}")
+    public ResponseEntity<List<Leave>> getLeaveByEmployee(@PathVariable long employeeId) {
+        Optional<Employee> employeeOptional = employeeService.getEmployeeById(employeeId);
+            if (employeeOptional.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+            }
+        List<Leave> leaves = leaveService.getLeavesByEmployeeId(employeeOptional.get());
+            return ResponseEntity.ok().body(leaves);
+        }
+
+        @DeleteMapping("/{leaveId}")
+    public ResponseEntity<String> cancelLeave(@PathVariable long leaveId){
+        try {
+            leaveService.cancelLeave(leaveId);
+            return ResponseEntity.ok("Leave with id " + leaveId + " has been cancelled");
+        }catch (InvalidCredential e){
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+
+
+        }
+
 }

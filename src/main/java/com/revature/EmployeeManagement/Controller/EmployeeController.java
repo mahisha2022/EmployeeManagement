@@ -1,6 +1,5 @@
 package com.revature.EmployeeManagement.Controller;
 
-import com.revature.EmployeeManagement.EmployeeManagementApplication;
 import com.revature.EmployeeManagement.Exception.InvalidCredential;
 import com.revature.EmployeeManagement.Exception.UserNotFoundException;
 import com.revature.EmployeeManagement.Model.Employee;
@@ -9,6 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Optional;
 
 @RestController
 @CrossOrigin("*")
@@ -23,9 +25,6 @@ public class EmployeeController {
     }
 
     @PostMapping("/register")
-//    public Employee postEmployee(@RequestBody Employee employee){
-//        return employeeService.createEmployee(employee);
-//    }
     public ResponseEntity<String> postEmployee(@RequestBody Employee employee){
         try {
             employeeService.createEmployee(employee);
@@ -45,7 +44,34 @@ public class EmployeeController {
         }
     }
 
+    @GetMapping("/employee/{employeeId}")
+    public Optional<Employee> getEmployeeById(@PathVariable long employeeId){
+        return employeeService.getEmployeeById(employeeId);
 
+    }
+
+    @GetMapping("/employee/manager/{managerId}")
+    public List<Employee> getEmployeeByManager(@PathVariable long managerId){
+        return employeeService.getEmployeeByManager(managerId);
+    }
+
+    @GetMapping("/employees")
+    public List<Employee> getAllEmployees(){
+        return employeeService.getAllEmployee();
+    }
+
+    @GetMapping("/manager/{id}")
+    public ResponseEntity<Employee> getManagerById(@PathVariable Long id ){
+        Employee manager = employeeService.getManagerById(id);
+        return new ResponseEntity<>(manager, HttpStatus.OK);
+    }
+
+
+
+    @ExceptionHandler(InvalidCredential.class)
+    public ResponseEntity<String > handleResourceNotFoundExceptions(InvalidCredential e){
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("The requested resource not Found");
+    }
 
 
 

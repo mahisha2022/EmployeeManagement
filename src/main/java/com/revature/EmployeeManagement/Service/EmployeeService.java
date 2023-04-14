@@ -116,4 +116,21 @@ public class EmployeeService {
     }
 
 
+    public Optional<Employee> getEmployeeById(long employeeId) {
+
+        return employeeRepository.findById(employeeId);
+    }
+
+    public List<Employee> getAllEmployee(){
+        return employeeRepository.findAll();
+    }
+
+    public Employee getManagerById(Long id){
+       Optional<Employee> employeeOptional = Optional.ofNullable(employeeRepository.findByIdAndIsManager(id, 1));
+       if(employeeOptional.isPresent()){
+           return employeeOptional.get();
+       } else {
+           throw  new InvalidCredential("Manager Not Found!");
+       }
+    }
 }
