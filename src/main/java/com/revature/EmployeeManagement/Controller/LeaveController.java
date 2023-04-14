@@ -80,5 +80,17 @@ public class LeaveController {
             return ResponseEntity.ok().body(leaves);
         }
 
+        @DeleteMapping("/{leaveId}")
+    public ResponseEntity<String> cancelLeave(@PathVariable long leaveId){
+        try {
+            leaveService.cancelLeave(leaveId);
+            return ResponseEntity.ok("Leave with id " + leaveId + " has been cancelled");
+        }catch (InvalidCredential e){
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+
+
+        }
+
 
 }
