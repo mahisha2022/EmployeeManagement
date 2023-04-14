@@ -1,5 +1,6 @@
 package com.revature.EmployeeManagement.Model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
@@ -31,10 +32,21 @@ public class Employee {
     private boolean isManager;
     @Column
     private Long managerId;
+    @Column
+    private int leaveBalance;
 
     @OneToMany(fetch = FetchType.EAGER)
     @JsonManagedReference
     private List<Leave> leaves;
+
+    @OneToMany(fetch = FetchType.EAGER)
+    @JsonManagedReference
+    private List<PerformanceReview> performanceReviews;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "goalId")
+    @JsonBackReference
+    private Goal goal;
 
 
 }
