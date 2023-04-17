@@ -80,6 +80,8 @@ public class LeaveService {
             throw new InvalidCredential("You already requested a leave between these date range. ");
         }
         leave.setEmployee(employee);
+        leave.setFirstname(employee.getFirstName());
+        leave.setLastname(employee.getLastName());
         leave.setStatus("Submitted");
         Leave newLeave = leaveRepository.save(leave);
         newLeave.setEmployeeId(employeeId);
