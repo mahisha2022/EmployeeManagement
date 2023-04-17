@@ -22,9 +22,12 @@ import java.util.Optional;
 public class LeaveController {
 
     LeaveService leaveService;
+ 
     EmployeeService employeeService;
 @Autowired
+  
     public LeaveController(LeaveService leaveService, EmployeeService employeeService) {
+    
         this.leaveService = leaveService;
         this.employeeService = employeeService;
     }
