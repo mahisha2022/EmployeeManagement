@@ -107,7 +107,7 @@ public class EmployeeService {
         employee.setPhoneNumber(updatedEmployee.getPhoneNumber());
         employee.setFirstName(updatedEmployee.getFirstName());
         employee.setLastName(updatedEmployee.getLastName());
-        return employee;
+        return employeeRepository.save(employee);
         }
 
 
