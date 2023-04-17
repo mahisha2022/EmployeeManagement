@@ -1,1 +1,3 @@
-INSERT INTO holiday ( ) VALUE ('Jan 01', 'Sunday', 'New Year''s Day', 'Federal Holiday');
+INSERT INTO Holiday (dates, days, name, type)
+VALUES
+('2023-01-01', 'Monday', 'New Year', 'Public')

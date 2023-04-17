@@ -22,6 +22,11 @@ public class Notification {
     @JoinColumn(name = "employeeId")
     private Employee employee;
 
-    public Notification(String message, Employee employee) {
-    }
+    @Column(insertable=false, updatable=false)
+    private Long employeeId;
+
+    @Column(insertable=false, updatable=false)
+    private Long managerId;
+
+
 }

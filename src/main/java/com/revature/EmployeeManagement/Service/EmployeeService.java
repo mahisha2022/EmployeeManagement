@@ -48,25 +48,27 @@ public class EmployeeService {
 
         //Check if email is already exists
         Employee existedEmployee = employeeRepository.findByEmail(employee.getEmail());
-        if(existedEmployee != null){
+        if (existedEmployee != null) {
             throw new InvalidCredential("Email " + employee.getEmail() + " already exists");
         }
         //check if employee email and password meet the requirements
         String email = employee.getEmail();
         String password = employee.getPassword();
 
-        if(!email.matches("^.+@.+$")){
-            throw  new InvalidCredential("Invalid email format");
+        if (!email.matches("^.+@.+$")) {
+            throw new InvalidCredential("Invalid email format");
         }
-        if (password.length() < 6 || !password.matches(".*[a-zA-Z].*")){
+        if (password.length() < 6 || !password.matches(".*[a-zA-Z].*")) {
             throw new InvalidCredential("Password must be at least 6 characters long and must contain letters");
         }
-       //If all requirement pass, save the employee and encode the password
+        //If all requirement pass, save the employee and encode the password
 //            String encodedPassword = this.passwordEncoder.encode(employee.getPassword());
 //            employee.setEmail(encodedPassword);
-            return employeeRepository.save(employee);
+        return employeeRepository.save(employee);
 
-        }
+
+        //Send verification email
+    }
 
 
 
