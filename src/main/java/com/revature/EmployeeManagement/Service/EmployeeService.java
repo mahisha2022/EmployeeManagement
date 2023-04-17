@@ -103,10 +103,18 @@ public class EmployeeService {
      */
     public Employee updateEmployeeById(long employeeId, Employee updatedEmployee){
         Employee employee = employeeRepository.findById(employeeId).get();
-        employee.setEmail(updatedEmployee.getEmail());
+        if (updatedEmployee.getEmail() != null)
+            employee.setEmail(updatedEmployee.getEmail());
+        if (updatedEmployee.getPhoneNumber() != null)
         employee.setPhoneNumber(updatedEmployee.getPhoneNumber());
+        if (updatedEmployee.getFirstName() != null)
         employee.setFirstName(updatedEmployee.getFirstName());
+        if (updatedEmployee.getLastName() != null)
         employee.setLastName(updatedEmployee.getLastName());
+        if (updatedEmployee.getIsManager() != 0)
+        employee.setIsManager(updatedEmployee.getIsManager());
+        if (updatedEmployee.getManagerId() != null)
+        employee.setManagerId(updatedEmployee.getManagerId());
         return employeeRepository.save(employee);
         }
 
