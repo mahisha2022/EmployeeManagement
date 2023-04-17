@@ -23,8 +23,18 @@ public class LeaveController {
 
     LeaveService leaveService;
     EmployeeService employeeService;
+
 @Autowired
+=======
+
+
+    EmployeeService employeeService;
+
+    public LeaveController(LeaveService leaveService) {
+    
+
     public LeaveController(LeaveService leaveService, EmployeeService employeeService) {
+    
         this.leaveService = leaveService;
         this.employeeService = employeeService;
     }

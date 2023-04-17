@@ -47,6 +47,30 @@ public class PerformanceReviewService {
             return performanceReviewRepository.save(performanceReview);
         }
 
+    public PerformanceReview updatePerformanceReview(PerformanceReview performanceReview) {
+        Optional<PerformanceReview> optionalPerformanceReview = performanceReviewRepository.findById(performanceReview.getReviewNumber());
+        if (optionalPerformanceReview.isPresent()) {
+            PerformanceReview existingPerformanceReview = optionalPerformanceReview.get();
+            existingPerformanceReview.setEmployee(performanceReview.getEmployee());
+            return performanceReviewRepository.save(existingPerformanceReview);
+        } else {
+            throw new RuntimeException("Performance review not found with id: " + performanceReview);
+        }
+    }
+
+    public void deletePerformanceReviewById(long reviewId) {
+        performanceReviewRepository.deleteById(reviewId);
+    }
+
+    public PerformanceReview getPerformanceReviewById(long reviewId) {
+        Optional<PerformanceReview> optionalPerformanceReview = performanceReviewRepository.findById(reviewId);
+        if (optionalPerformanceReview.isPresent()) {
+            return optionalPerformanceReview.get();
+        } else {
+            throw new RuntimeException("Performance review not found with id: " + reviewId);
+        }
+    }
+
 
 
     }
