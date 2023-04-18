@@ -9,7 +9,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+import java.util.Optional;
+
 @RestController
+@CrossOrigin("*")
 @RequestMapping("/goals")
 public class GoalController {
 
@@ -84,6 +88,29 @@ public class GoalController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to update goal. Please try again later");
         }
     }
+
+    /**
+     * Get all goals
+     * ENDPOINT GET localhost:9000/goals
+     * @return
+     */
+
+    @GetMapping("")
+    public List<Goal> getAllGoal(){
+        return goalService.getAllGoal();
+    }
+
+    @GetMapping("/employee/{employeeId}")
+    public ResponseEntity<List<Goal>> getGoalByEmployeeId(@PathVariable long employeeId){
+       List<Goal> goals = goalService.getGoalByEmployeeId(employeeId);
+       if(goals != null){
+           return ResponseEntity.ok(goals);
+       }
+       else {
+           return ResponseEntity.notFound().build();
+       }
+    }
+
 
 
     @ExceptionHandler(InvalidCredential.class)
