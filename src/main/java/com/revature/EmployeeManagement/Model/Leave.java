@@ -26,6 +26,7 @@ public class Leave {
     private String leaveType;
     private String status;
     private String notes;
+    private String feedback;
     @ManyToOne(fetch = FetchType.EAGER)
     @JsonBackReference
     @JoinColumn(name = "employeeId")
