@@ -6,6 +6,7 @@ import com.revature.EmployeeManagement.Exception.InvalidCredential;
 import com.revature.EmployeeManagement.Model.Employee;
 import com.revature.EmployeeManagement.Model.Leave;
 import com.revature.EmployeeManagement.Repositoty.EmployeeRepository;
+import com.revature.EmployeeManagement.Repositoty.LeaveRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -29,11 +30,13 @@ public class EmployeeService {
      */
 
     private EmployeeRepository employeeRepository;
+    private LeaveRepository leaveRepository;
     private List<Leave> leaves;
     PasswordEncoder passwordEncoder;
     @Autowired
-    public EmployeeService(EmployeeRepository employeeRepository){
+    public EmployeeService(EmployeeRepository employeeRepository, LeaveRepository leaveRepository){
         this.employeeRepository = employeeRepository;
+        this.leaveRepository = leaveRepository;
         leaves = new ArrayList<>();
         this.passwordEncoder = new BCryptPasswordEncoder();
     }
@@ -144,4 +147,35 @@ public class EmployeeService {
            throw  new InvalidCredential("Manager Not Found!");
        }
     }
+
+    public Employee createProfile(Employee employee) throws InvalidCredential {
+        if ((employee.getIsManager() != 0 && employee.getIsManager() != 1)) {
+            throw new InvalidCredential("Invalid 'isManager' value. It should be either 0 or 1.");
+        }
+
+        // Check if email already exists
+        Employee existedEmployee = employeeRepository.findByEmail(employee.getEmail());
+        if (existedEmployee != null) {
+            throw new InvalidCredential("Email " + employee.getEmail() + " already exists");
+        }
+
+        // Check if employee email and password meet the requirements
+        String email = employee.getEmail();
+        String password = employee.getPassword();
+
+        if (!email.matches("^.+@.+$")) {
+            throw new InvalidCredential("Invalid email format");
+        }
+        if (password.length() < 6 || !password.matches(".*[a-zA-Z].*")) {
+            throw new InvalidCredential("Password must be at least 6 characters long and must contain letters");
+        }
+
+        // If all requirements pass, save the employee
+        return employeeRepository.save(employee);
+    }
+
+    public List<Leave> getAllLeaves() {
+        return leaveRepository.findAll();
+    }
+
 }
