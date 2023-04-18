@@ -15,7 +15,7 @@ public interface LeaveRepository extends JpaRepository<Leave, Long> {
 
     List<Leave> findByEmployee(Employee employee);
 
-    List<Leave> findByEmployee_ManagerId(Long managerId);
+    List<Leave> findByEmployee_ManagerIdOrderByStartDate(Long managerId);
 
     @Query("SELECT l FROM Leave l WHERE l.employee.id = :employeeId AND (l.startDate <= :endDate AND l.endDate >= :startDate)")
     List<Leave> findLeavesByEmployeeIdAndStartRange(Long employeeId, LocalDate startDate, LocalDate endDate);
