@@ -47,7 +47,7 @@ public class Employee {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "goalId")
     @JsonBackReference
-    private Goal goal;
+    private List<Goal> goal;
 
 
 
