@@ -1,10 +1,8 @@
 package com.revature.EmployeeManagement.Model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
@@ -28,9 +26,11 @@ public class Goal {
     private String status;
 
 
-    @OneToMany(fetch = FetchType.EAGER)
-    @JsonManagedReference
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JsonBackReference
+    @JoinColumn(name = "employeeId")
     private Employee employees;
 
-
+    @Column(name = "employeeId", insertable = false, updatable = false)
+    private long employeeId;
 }
