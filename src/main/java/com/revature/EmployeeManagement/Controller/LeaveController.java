@@ -155,7 +155,7 @@ public class LeaveController {
      * @return
      */
 
-    @GetMapping("/employee-availability/manager/{managerId}")
+    @PostMapping("/employee-availability/manager/{managerId}")
     public ResponseEntity<List<Employee>> getEmployeeAvailability(@PathVariable Long managerId, @RequestBody Leave leave){
         List<Employee> availableEmployees = leaveService.getEmployeeAvailability(managerId, leave);
         return ResponseEntity.ok(availableEmployees);
