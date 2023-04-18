@@ -211,7 +211,7 @@ public class LeaveService {
      */
 
     public List<Leave> getLeaveRequestByManager(Long managerId){
-        return leaveRepository.findByEmployee_ManagerId(managerId);
+        return leaveRepository.findByEmployee_ManagerIdOrderByStartDate(managerId);
     }
 
     /**
