@@ -24,8 +24,8 @@ public class LeaveController {
     LeaveService leaveService;
  
     EmployeeService employeeService;
-@Autowired
-  
+
+    @Autowired
     public LeaveController(LeaveService leaveService, EmployeeService employeeService) {
     
         this.leaveService = leaveService;
