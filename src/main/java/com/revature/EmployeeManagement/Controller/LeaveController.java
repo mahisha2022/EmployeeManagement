@@ -133,14 +133,14 @@ public class LeaveController {
     /**
      * ENDPOINT POST localhost:9000/leaves/cancel/{id}
      * @param id
-     * @param notes
+     * @param feedback
      * @return
      */
 
     @PostMapping("/cancel/{id}")
-    public ResponseEntity<String> rejectLeave(@PathVariable long id, @RequestBody String notes) {
+    public ResponseEntity<String> rejectLeave(@PathVariable long id, @RequestBody String feedback) {
         try {
-            leaveService.rejectLeave(id, notes);
+            leaveService.rejectLeave(id, feedback);
             return ResponseEntity.ok().body("Leave Successfully rejected!");
         } catch (InvalidCredential e) {
             return ResponseEntity.badRequest().body("Leave already approved/rejected or not existed");

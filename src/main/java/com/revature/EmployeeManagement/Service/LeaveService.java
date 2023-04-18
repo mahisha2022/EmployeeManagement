@@ -183,11 +183,11 @@ public class LeaveService {
      * @return
      */
 
-    public Leave rejectLeave(long id, String note){
+    public Leave rejectLeave(long id, String feedback){
         Leave submittedLeave = leaveRepository.findById(id).get();
         if(submittedLeave.getStatus().equals("Submitted")){
             submittedLeave.setStatus("Rejected");
-            submittedLeave.setNotes(note);
+            submittedLeave.setFeedback(feedback);
             leaveRepository.save(submittedLeave);
 
 
