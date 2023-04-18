@@ -113,7 +113,7 @@ public class LeaveController {
     }
 
     /**
-     *
+     *ENDPOINT localhost:9000/leaves/approve/{id}
      * @param id
      * @return approved leave
      * Endpoint POST localhost:9000/leaves/approve/{id}
@@ -130,6 +130,13 @@ public class LeaveController {
         }
     }
 
+    /**
+     * ENDPOINT POST localhost:9000/leaves/cancel/{id}
+     * @param id
+     * @param notes
+     * @return
+     */
+
     @PostMapping("/cancel/{id}")
     public ResponseEntity<String> rejectLeave(@PathVariable long id, @RequestBody String notes) {
         try {
@@ -139,6 +146,19 @@ public class LeaveController {
             return ResponseEntity.badRequest().body("Leave already approved/rejected or not existed");
 
         }
+    }
+
+    /**
+     * EndPOINT GET localhost:9000/leaves/employee-availability/manager/{managerId}
+     * @param managerId
+     * @param leave
+     * @return
+     */
+
+    @GetMapping("/employee-availability/manager/{managerId}")
+    public ResponseEntity<List<Employee>> getEmployeeAvailability(@PathVariable Long managerId, @RequestBody Leave leave){
+        List<Employee> availableEmployees = leaveService.getEmployeeAvailability(managerId, leave);
+        return ResponseEntity.ok(availableEmployees);
     }
 
 

@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.security.spec.ECPoint;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -203,8 +204,47 @@ public class LeaveService {
         return submittedLeave;
     }
 
+    /**
+     * get List of leaves by managerId
+     * @param managerId
+     * @return
+     */
+
     public List<Leave> getLeaveRequestByManager(Long managerId){
         return leaveRepository.findByEmployee_ManagerId(managerId);
+    }
+
+    /**
+     * get employee's availability who report to a manager
+     * @param managerId
+     * @param leave
+     * @return
+     */
+
+    public List<Employee> getEmployeeAvailability(Long managerId, Leave leave){
+        List<Employee> availableEmployee = new ArrayList<>();
+
+        //find all employees who report to the manager
+        List<Employee> employees = employeeRepository.findByManagerId(managerId);
+
+        //Iterate through employee and check their availability
+        for (Employee e: employees){
+            boolean isAvailable = true;
+            //
+            List<Leave> leaves = leaveRepository.findLeavesByEmployeeIdAndStartRange(e.getId(), leave.getStartDate(), leave.getEndDate());
+
+            //check if the employee has any leaves during the given date range
+            for (Leave l: leaves){
+                if (!leave.getStatus().equalsIgnoreCase("Approved")){
+                    isAvailable = false;
+                    break;
+                }
+            }
+            if (isAvailable){
+                availableEmployee.add(e);
+            }
+        }
+        return availableEmployee;
     }
 
 
