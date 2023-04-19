@@ -22,24 +22,6 @@ public class NotificationService {
     private EmployeeRepository employeeRepository;
 
 
-//    public Notification sendNotification(Notification notification, Employee employee){
-//        Optional<Employee> employeeOptional = employeeRepository.findManagerByEmployee(employee.getId());
-//        Notification newNotification = new Notification();
-//        newNotification.setEmployee(notification.getEmployee());
-//        newNotification.setMessage(notification.getMessage());
-//        return notificationRepository.save(notification);
-//    }
-//
-//    public Notification leaveRequestNotification(Employee employee, Leave leave) {
-//
-//        String message = "Employee " + employee.getFirstName() + " has requested leave from " +
-//                " to " + leave.getStartDate() + leave.getEndDate();
-//
-//        Notification notification = new Notification(message, employee);
-//
-//        return notificationRepository.save(notification);
-//    }
-
     public List<Notification> getAllNotifications(){
         return notificationRepository.findAll();
     }
@@ -51,7 +33,34 @@ public class NotificationService {
         return notificationRepository.findById(id).get();
     }
 
+    public Notification submitNotificationToManager(Notification notification, Employee employee){
+        if (employee.getId() != null){
+            Notification employeeNotification = new Notification();
+            employeeNotification.setMessage(notification.getMessage());
+            employeeNotification.setEmployee(employee);
+//        employeeNotification.setEmployeeId(employee.getId());
+            notificationRepository.save(employeeNotification);
+            return employeeNotification;
+        }
 
+        if(employee.getManagerId() != null){
+            Notification managerNotification = new Notification();
+            managerNotification.setMessage(notification.getMessage());
+            managerNotification.setManagerId(employee.getManagerId());
+//            managerNotification.setManagerId(employee.getManager().getId());
+            notificationRepository.save(managerNotification);
+            return managerNotification;
+        }
+        return notification;
+
+    }
+    public List<Notification> getNotificationByManager(Long managerId){
+        return  notificationRepository.findByManagerId(managerId);
+    }
+
+    public List<Notification> getNotificationByEmployee(Long employeeId){
+        return notificationRepository.findByEmployeeId(employeeId);
+    }
 
 
 }

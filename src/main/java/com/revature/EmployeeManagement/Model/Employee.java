@@ -40,6 +40,15 @@ public class Employee {
     @JsonManagedReference
     private List<Leave> leaves;
 
+    public List<Leave> getLeaves() {
+        return leaves;
+    }
+
+    public void setLeaves(List<Leave> leaves) {
+        this.leaves = leaves;
+    }
+
+
     @OneToMany(fetch = FetchType.EAGER)
     @JsonManagedReference
     private List<PerformanceReview> performanceReviews;

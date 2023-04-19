@@ -122,6 +122,13 @@ public class GoalService {
         return goalRepository.save(goal);
     }
 
+    /**
+     * Update a goal if only the status is not "Accepted"
+     * @param goalId
+     * @param goal
+     * @return
+     */
+
     public Goal updateGoal(Long goalId, Goal goal){
         //retrieve the goal from the repository
         Goal existedGoal = goalRepository.findById(goalId).get();
@@ -145,6 +152,21 @@ public class GoalService {
     }
 //    For Testing
     public List<Goal> getGoals() {
+        return goalRepository.findAll();
+    }
+
+    /**
+     * Return goal by employee id
+     *
+     * @param employeeId
+     * @return
+     */
+
+    public List<Goal> getGoalByEmployeeId(long employeeId){
+      return goalRepository.findByEmployeeId(employeeId);
+    }
+
+    public List<Goal> getAllGoal(){
         return goalRepository.findAll();
     }
 
