@@ -22,4 +22,8 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
     Employee findByIdAndIsManager(Long id, int isManager);
     @Query("SELECT m FROM Employee m WHERE m.id = :managerId")
     Employee findManagerByEmployeeId(@Param("managerId") Long managerId);
+
+
+
+
 }
