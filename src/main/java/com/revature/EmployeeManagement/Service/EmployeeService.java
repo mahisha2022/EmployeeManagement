@@ -208,8 +208,6 @@ public class EmployeeService {
             // Delete associated records in the leave table
             leaveRepository.deleteByEmployee(employee);
 
-            // Delete the employee
-            employeeRepository.deleteById(employeeId);
 
             performanceReviewRepository.deleteByEmployeeId(employeeId);
 
@@ -219,6 +217,8 @@ public class EmployeeService {
             notificationRepository.deleteByEmployeeId(employeeId);
 
             goalRepository.deleteByEmployeeId(employeeId);
+            // Delete the employee
+            employeeRepository.deleteById(employeeId);
 
 
         } else {
