@@ -52,12 +52,15 @@ public class PerformanceReviewService {
         if (optionalPerformanceReview.isPresent()) {
             PerformanceReview existingPerformanceReview = optionalPerformanceReview.get();
             existingPerformanceReview.setEmployee(performanceReview.getEmployee());
+            existingPerformanceReview.setDeliverables(performanceReview.getDeliverables());
+            existingPerformanceReview.setAchievements(performanceReview.getAchievements());
+            existingPerformanceReview.setAreaOfImprovement(performanceReview.getAreaOfImprovement());
+            existingPerformanceReview.setScore(performanceReview.getScore());
             return performanceReviewRepository.save(existingPerformanceReview);
         } else {
-            throw new RuntimeException("Performance review not found with id: " + performanceReview);
+            throw new RuntimeException("Performance review not found with id: " + performanceReview.getReviewNumber());
         }
     }
-
     public void deletePerformanceReviewById(long reviewId) {
         performanceReviewRepository.deleteById(reviewId);
     }
