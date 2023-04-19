@@ -14,7 +14,6 @@ import java.util.Optional;
 @RestController
 @CrossOrigin("*")
 @RequestMapping("/goals")
-@CrossOrigin("*")
 public class GoalController {
 
 
@@ -90,10 +89,6 @@ public class GoalController {
         }
     }
 //    For Testing
-    @GetMapping("")
-    public List<Goal> getGoals() {
-        return goalService.getGoals();
-    }
 
     /**
      * Get all goals
