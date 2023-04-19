@@ -10,6 +10,7 @@ import com.revature.EmployeeManagement.Repositoty.NotificationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -141,6 +142,10 @@ public class GoalService {
         else {
             throw new InvalidCredential("Accepted Goal cannot be updated!");
         }
+    }
+//    For Testing
+    public List<Goal> getGoals() {
+        return goalRepository.findAll();
     }
 
 
