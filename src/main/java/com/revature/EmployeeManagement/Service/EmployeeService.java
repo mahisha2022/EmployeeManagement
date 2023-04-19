@@ -5,8 +5,8 @@ import com.revature.EmployeeManagement.Exception.UserNotFoundException;
 import com.revature.EmployeeManagement.Exception.InvalidCredential;
 import com.revature.EmployeeManagement.Model.Employee;
 import com.revature.EmployeeManagement.Model.Leave;
-import com.revature.EmployeeManagement.Repositoty.EmployeeRepository;
-import com.revature.EmployeeManagement.Repositoty.LeaveRepository;
+import com.revature.EmployeeManagement.Repositoty.*;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -32,11 +32,20 @@ public class EmployeeService {
     private EmployeeRepository employeeRepository;
     private LeaveRepository leaveRepository;
     private List<Leave> leaves;
+    private NotificationRepository notificationRepository;
+
+    private PerformanceReviewRepository performanceReviewRepository;
+
+    private GoalRepository goalRepository;
+
     PasswordEncoder passwordEncoder;
     @Autowired
-    public EmployeeService(EmployeeRepository employeeRepository, LeaveRepository leaveRepository){
+    public EmployeeService(EmployeeRepository employeeRepository, LeaveRepository leaveRepository, NotificationRepository notificationRepository, PerformanceReviewRepository performanceReviewRepository, GoalRepository goalRepository){
         this.employeeRepository = employeeRepository;
         this.leaveRepository = leaveRepository;
+        this.notificationRepository= notificationRepository;
+        this.performanceReviewRepository = performanceReviewRepository;
+        this.goalRepository = goalRepository;
         leaves = new ArrayList<>();
         this.passwordEncoder = new BCryptPasswordEncoder();
     }
@@ -178,4 +187,42 @@ public class EmployeeService {
         return leaveRepository.findAll();
     }
 
+    public void deleteManagerById(long managerId) {
+        Employee manager = employeeRepository.findByIdAndIsManager(managerId, 1);
+        if (manager != null) {
+            employeeRepository.deleteById(managerId);
+        } else {
+            throw new RuntimeException("Manager not found with id: " + managerId);
+        }
+    }
+
+
+    @Transactional
+    public void deleteEmployeeById(long employeeId) {
+        // Find the employee by id
+        Optional<Employee> employeeOpt = employeeRepository.findById(employeeId);
+
+        if (employeeOpt.isPresent()) {
+            Employee employee = employeeOpt.get();
+
+            // Delete associated records in the leave table
+            leaveRepository.deleteByEmployee(employee);
+
+            // Delete the employee
+            employeeRepository.deleteById(employeeId);
+
+            performanceReviewRepository.deleteByEmployeeId(employeeId);
+
+
+
+            // Delete notifications related to the employee
+            notificationRepository.deleteByEmployeeId(employeeId);
+
+            goalRepository.deleteByEmployeeId(employeeId);
+
+
+        } else {
+            throw new RuntimeException("Employee not found with id: " + employeeId);
+        }
+    }
 }

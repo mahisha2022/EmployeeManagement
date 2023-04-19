@@ -11,4 +11,9 @@ import java.util.List;
 public interface PerformanceReviewRepository extends JpaRepository<PerformanceReview, Long> {
 
     List<PerformanceReview> findByEmployee(Employee employee);
+
+    void deleteByEmployeeId(Long employeeId);
+
+
+
 }

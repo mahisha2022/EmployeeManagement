@@ -58,4 +58,14 @@ public class AdminController {
         List<Leave> leaves = employeeService.getAllLeaves();
         return ResponseEntity.ok(leaves);
     }
+
+
+    @DeleteMapping("/delete/employee/{employeeId}")
+    public ResponseEntity<Void> deleteEmployee(@PathVariable long employeeId) {
+        employeeService.deleteEmployeeById(employeeId);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
 }
+
+
