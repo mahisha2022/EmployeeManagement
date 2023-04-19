@@ -8,13 +8,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 import java.util.Optional;
 
 @RestController
 @CrossOrigin("*")
 @RequestMapping("/goals")
+@CrossOrigin("*")
 public class GoalController {
 
 
@@ -44,6 +44,7 @@ public class GoalController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to assign goal. Please try again later");
         }
     }
+
 
     @PostMapping("/{goalId}/accept")
     public ResponseEntity<String> acceptGoal(@PathVariable long goalId){
@@ -87,6 +88,11 @@ public class GoalController {
         catch (Exception e){
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to update goal. Please try again later");
         }
+    }
+//    For Testing
+    @GetMapping("")
+    public List<Goal> getGoals() {
+        return goalService.getGoals();
     }
 
     /**

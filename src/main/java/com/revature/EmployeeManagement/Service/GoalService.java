@@ -150,6 +150,10 @@ public class GoalService {
             throw new InvalidCredential("Accepted Goal cannot be updated!");
         }
     }
+//    For Testing
+    public List<Goal> getGoals() {
+        return goalRepository.findAll();
+    }
 
     /**
      * Return goal by employee id
