@@ -15,4 +15,6 @@ public interface GoalRepository extends JpaRepository<Goal, Long> {
     Optional<Goal> findByNameAndDeadlineAndEmployeeId(String name, LocalDate deadline, long employeeId);
 
     List<Goal> findByEmployeeId(long employeeId);
+
+    List<Goal> findByEmployees_ManagerId(long employeeId);
 }

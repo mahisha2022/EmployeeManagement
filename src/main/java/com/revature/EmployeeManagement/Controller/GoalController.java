@@ -3,6 +3,7 @@ package com.revature.EmployeeManagement.Controller;
 
 import com.revature.EmployeeManagement.Exception.InvalidCredential;
 import com.revature.EmployeeManagement.Model.Goal;
+import com.revature.EmployeeManagement.Model.Leave;
 import com.revature.EmployeeManagement.Service.GoalService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -109,6 +110,15 @@ public class GoalController {
        else {
            return ResponseEntity.notFound().build();
        }
+    }
+
+    @GetMapping("/manager/{managerId}")
+    public ResponseEntity<List<Goal>> getLeaveByManager(@PathVariable Long managerId){
+        List<Goal> goals = goalService.getGoalByManagerId(managerId);
+        if(goals.isEmpty()){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(goals, HttpStatus.OK);
     }
 
 

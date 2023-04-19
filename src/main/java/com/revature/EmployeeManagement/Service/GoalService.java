@@ -10,6 +10,7 @@ import com.revature.EmployeeManagement.Repositoty.NotificationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.security.PublicKey;
 import java.util.List;
 import java.util.Optional;
 
@@ -162,6 +163,10 @@ public class GoalService {
       return goalRepository.findByEmployeeId(employeeId);
     }
 
+
+    public List<Goal> getGoalByManagerId(long managerId){
+        return goalRepository.findByEmployees_ManagerId(managerId);
+    }
     public List<Goal> getAllGoal(){
         return goalRepository.findAll();
     }
