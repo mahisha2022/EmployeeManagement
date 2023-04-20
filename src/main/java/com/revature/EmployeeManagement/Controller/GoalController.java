@@ -102,9 +102,9 @@ public class GoalController {
         return goalService.getAllGoal();
     }
 
-    @GetMapping("/employee/{employeeId}")
-    public ResponseEntity<List<Goal>> getGoalByEmployeeId(@PathVariable long employeeId){
-       List<Goal> goals = goalService.getGoalByEmployeeId(employeeId);
+    @GetMapping("/employee/{employeeId}/{personal}")
+    public ResponseEntity<List<Goal>> getGoalByEmployeeId(@PathVariable long employeeId, @PathVariable long personal){
+       List<Goal> goals = goalService.getGoalByEmployeeId(employeeId, personal);
        if(goals != null){
            return ResponseEntity.ok(goals);
        }

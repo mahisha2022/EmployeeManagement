@@ -25,6 +25,7 @@ public class Goal {
     private int weightage;
     private String comments;
     private String status;
+    private int personal;
 
 
     @ManyToOne(fetch = FetchType.EAGER)

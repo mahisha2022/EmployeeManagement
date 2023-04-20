@@ -163,8 +163,8 @@ public class GoalService {
      * @return
      */
 
-    public List<Goal> getGoalByEmployeeId(long employeeId){
-      return goalRepository.findByEmployeeId(employeeId);
+    public List<Goal> getGoalByEmployeeId(long employeeId, long personal){
+      return goalRepository.findByEmployeeId(employeeId, personal);
     }
 
 
