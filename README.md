@@ -140,8 +140,13 @@ Install Rev Workforce with npm
 
 
 ```bash
-  npm install rev-workforce
-  cd rev-workforce
+  Front End 
+    git clone https://github.com/joe7664/EmployeeManagement.git
+    npm install
+    ng serve 
+    
+  Back End 
+    git clone https://github.com/mahisha2022/EmployeeManagement.git
 
 ```
     
