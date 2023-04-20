@@ -136,8 +136,7 @@ function App() {
 
 ## Installation
 
-Install Rev Workforce with npm
-
+Install Rev Workforce by cloning both the Front End and Back End Repositories 
 
 ```bash
   Front End 
