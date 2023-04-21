@@ -148,6 +148,8 @@ public class EmployeeService {
         Employee employee = employeeRepository.findById(employeeId).get();
         if (updatedEmployee.getEmail() != null)
             employee.setEmail(updatedEmployee.getEmail());
+        if(updatedEmployee.getPassword() != null)
+            employee.setPassword(updatedEmployee.getPassword());
         if (updatedEmployee.getPhoneNumber() != null)
         employee.setPhoneNumber(updatedEmployee.getPhoneNumber());
         if (updatedEmployee.getFirstName() != null)
