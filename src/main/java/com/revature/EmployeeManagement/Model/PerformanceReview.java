@@ -19,12 +19,13 @@ public class PerformanceReview {
     private String deliverables;
     private String achievements;
     private String areaOfImprovement;
+    private String managerFeedback;
     private int score;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "goalId", nullable = false)
     @JsonBackReference
-    private Employee employee;
-
+    private Goal goal;
 
 
 }

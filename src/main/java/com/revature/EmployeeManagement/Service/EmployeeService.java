@@ -162,23 +162,41 @@ public class EmployeeService {
         }
 
 
-
-
+    /**
+     * Get Employee By Manager
+     * @param managerId
+     * @return
+     */
     public List<Employee> getEmployeeByManager(Long managerId){
         List<Employee> employees = employeeRepository.findByManagerId(managerId);
         return employees;
     }
 
+    /**
+     * Get Employee By Id
+     * @param employeeId
+     * @return
+     */
 
     public Optional<Employee> getEmployeeById(long employeeId) {
 
         return employeeRepository.findById(employeeId);
     }
 
+    /***
+     * Get All Employee
+     * @return
+     */
+
     public List<Employee> getAllEmployee(){
         return employeeRepository.findAll();
     }
 
+    /**
+     * Get Manager By Id
+     * @param id
+     * @return
+     */
     public Employee getManagerById(Long id){
        Optional<Employee> employeeOptional = Optional.ofNullable(employeeRepository.findByIdAndIsManager(id, 1));
        if(employeeOptional.isPresent()){
@@ -188,72 +206,73 @@ public class EmployeeService {
        }
     }
 
-    public Employee createProfile(Employee employee) throws InvalidCredential {
-        if ((employee.getIsManager() != 0 && employee.getIsManager() != 1)) {
-            throw new InvalidCredential("Invalid 'isManager' value. It should be either 0 or 1.");
-        }
-
-        // Check if email already exists
-        Employee existedEmployee = employeeRepository.findByEmail(employee.getEmail());
-        if (existedEmployee != null) {
-            throw new InvalidCredential("Email " + employee.getEmail() + " already exists");
-        }
-
-        // Check if employee email and password meet the requirements
-        String email = employee.getEmail();
-        String password = employee.getPassword();
-
-        if (!email.matches("^.+@.+$")) {
-            throw new InvalidCredential("Invalid email format");
-        }
-        if (password.length() < 6 || !password.matches(".*[a-zA-Z].*")) {
-            throw new InvalidCredential("Password must be at least 6 characters long and must contain letters");
-        }
-
-        // If all requirements pass, save the employee
-        return employeeRepository.save(employee);
-    }
-
-    public List<Leave> getAllLeaves() {
-        return leaveRepository.findAll();
-    }
-
-    public void deleteManagerById(long managerId) {
-        Employee manager = employeeRepository.findByIdAndIsManager(managerId, 1);
-        if (manager != null) {
-            employeeRepository.deleteById(managerId);
-        } else {
-            throw new RuntimeException("Manager not found with id: " + managerId);
-        }
-    }
-
-
-    @Transactional
-    public void deleteEmployeeById(long employeeId) {
-        // Find the employee by id
-        Optional<Employee> employeeOpt = employeeRepository.findById(employeeId);
-
-        if (employeeOpt.isPresent()) {
-            Employee employee = employeeOpt.get();
-
-            // Delete associated records in the leave table
-            leaveRepository.deleteByEmployee(employee);
-
-
-            performanceReviewRepository.deleteByEmployeeId(employeeId);
-
-
-
-            // Delete notifications related to the employee
-            notificationRepository.deleteByEmployeeId(employeeId);
-
-            goalRepository.deleteByEmployeeId(employeeId);
-            // Delete the employee
-            employeeRepository.deleteById(employeeId);
-
-
-        } else {
-            throw new RuntimeException("Employee not found with id: " + employeeId);
-        }
-    }
+//
+//    public Employee createProfile(Employee employee) throws InvalidCredential {
+//        if ((employee.getIsManager() != 0 && employee.getIsManager() != 1)) {
+//            throw new InvalidCredential("Invalid 'isManager' value. It should be either 0 or 1.");
+//        }
+//
+//        // Check if email already exists
+//        Employee existedEmployee = employeeRepository.findByEmail(employee.getEmail());
+//        if (existedEmployee != null) {
+//            throw new InvalidCredential("Email " + employee.getEmail() + " already exists");
+//        }
+//
+//        // Check if employee email and password meet the requirements
+//        String email = employee.getEmail();
+//        String password = employee.getPassword();
+//
+//        if (!email.matches("^.+@.+$")) {
+//            throw new InvalidCredential("Invalid email format");
+//        }
+//        if (password.length() < 6 || !password.matches(".*[a-zA-Z].*")) {
+//            throw new InvalidCredential("Password must be at least 6 characters long and must contain letters");
+//        }
+//
+//        // If all requirements pass, save the employee
+//        return employeeRepository.save(employee);
+//    }
+//
+//    public List<Leave> getAllLeaves() {
+//        return leaveRepository.findAll();
+//    }
+//
+//    public void deleteManagerById(long managerId) {
+//        Employee manager = employeeRepository.findByIdAndIsManager(managerId, 1);
+//        if (manager != null) {
+//            employeeRepository.deleteById(managerId);
+//        } else {
+//            throw new RuntimeException("Manager not found with id: " + managerId);
+//        }
+//    }
+//
+//
+//    @Transactional
+//    public void deleteEmployeeById(long employeeId) {
+//        // Find the employee by id
+//        Optional<Employee> employeeOpt = employeeRepository.findById(employeeId);
+//
+//        if (employeeOpt.isPresent()) {
+//            Employee employee = employeeOpt.get();
+//
+//            // Delete associated records in the leave table
+//            leaveRepository.deleteByEmployee(employee);
+//
+//
+//            performanceReviewRepository.deleteByEmployeeId(employeeId);
+//
+//
+//
+//            // Delete notifications related to the employee
+//            notificationRepository.deleteByEmployeeId(employeeId);
+//
+//            goalRepository.deleteByEmployeeId(employeeId);
+//            // Delete the employee
+//            employeeRepository.deleteById(employeeId);
+//
+//
+//        } else {
+//            throw new RuntimeException("Employee not found with id: " + employeeId);
+//        }
+//    }
 }

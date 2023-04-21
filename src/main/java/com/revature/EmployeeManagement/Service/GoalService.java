@@ -167,12 +167,30 @@ public class GoalService {
       return goalRepository.findByEmployeeId(employeeId, personal);
     }
 
-
+    /**
+     * Get List of Goal By Manager Id
+     * @param managerId
+     * @return
+     */
     public List<Goal> getGoalByManagerId(long managerId){
         return goalRepository.findByEmployees_ManagerId(managerId);
     }
+
+    /**
+     * Get List of All Goals
+     * @return
+     */
     public List<Goal> getAllGoal(){
         return goalRepository.findAll();
+    }
+
+    /**
+     * Get Goal By Id
+     * @param goalId
+     * @return
+     */
+    public Goal getGoalById(long goalId){
+        return goalRepository.findById(goalId).get();
     }
 
 
