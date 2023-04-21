@@ -97,6 +97,8 @@ public class LeaveService {
         employeeNotification.setManagerId(managerId);
         employeeNotification.setMessage(employee1.getFirstName() + " "+ employee1.getLastName() +" have requested a leave from " + leave.getStartDate() +
                 " to " + leave.getEndDate() + ". Please review the request!");
+
+        employee1.getLeaves().add(leave);
         notificationRepository.save(employeeNotification);
 
 
