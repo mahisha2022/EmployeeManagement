@@ -6,15 +6,18 @@ import com.revature.EmployeeManagement.Exception.InvalidCredential;
 import com.revature.EmployeeManagement.Model.Employee;
 import com.revature.EmployeeManagement.Model.Leave;
 import com.revature.EmployeeManagement.Repositoty.*;
+import jakarta.mail.MessagingException;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 
 @Service
 public class EmployeeService {
@@ -38,9 +41,12 @@ public class EmployeeService {
 
     private GoalRepository goalRepository;
 
+    private EmailSenderService emailSenderService;
     PasswordEncoder passwordEncoder;
     @Autowired
-    public EmployeeService(EmployeeRepository employeeRepository, LeaveRepository leaveRepository, NotificationRepository notificationRepository, PerformanceReviewRepository performanceReviewRepository, GoalRepository goalRepository){
+    public EmployeeService(EmployeeRepository employeeRepository, LeaveRepository leaveRepository, NotificationRepository notificationRepository,
+                           PerformanceReviewRepository performanceReviewRepository, GoalRepository goalRepository,
+                           EmailSenderService emailSenderService){
         this.employeeRepository = employeeRepository;
         this.leaveRepository = leaveRepository;
         this.notificationRepository= notificationRepository;
@@ -48,6 +54,7 @@ public class EmployeeService {
         this.goalRepository = goalRepository;
         leaves = new ArrayList<>();
         this.passwordEncoder = new BCryptPasswordEncoder();
+        this.emailSenderService = emailSenderService;
     }
 
     /**
@@ -56,7 +63,7 @@ public class EmployeeService {
      * @return
      */
 
-    public Employee createEmployee(Employee employee) throws InvalidCredential {
+    public Employee createEmployee(Employee employee) throws InvalidCredential, MessagingException, UnsupportedEncodingException {
 
         //Check if email is already exists
         Employee existedEmployee = employeeRepository.findByEmail(employee.getEmail());
@@ -70,16 +77,23 @@ public class EmployeeService {
         if (!email.matches("^.+@.+$")) {
             throw new InvalidCredential("Invalid email format");
         }
-        if (password.length() < 6 || !password.matches(".*[a-zA-Z].*")) {
-            throw new InvalidCredential("Password must be at least 6 characters long and must contain letters");
-        }
-        //If all requirement pass, save the employee and encode the password
-//            String encodedPassword = this.passwordEncoder.encode(employee.getPassword());
-//            employee.setEmail(encodedPassword);
-        return employeeRepository.save(employee);
+//        if (password.length() < 6 || !password.matches(".*[a-zA-Z].*")) {
+//            throw new InvalidCredential("Password must be at least 6 characters long and must contain letters");
+//        }
+
+        //create random number for password
+
+        Random random = new Random();
+        String randomCode = String.valueOf(random.nextInt(9999999));
+        employee.setPassword(randomCode);
 
 
         //Send verification email
+
+        emailSenderService.sendAccountRegistrationEmail(employee);
+
+
+        return employeeRepository.save(employee);
     }
 
 
@@ -98,14 +112,31 @@ public class EmployeeService {
             }
             employee.setEmail(email);
             employee.setPassword(password);
-//            String encodedPassword = employee.getPassword();
-//            return employee;
-//            if(!this.passwordEncoder.matches(password.trim(), encodedPassword)){
-//                throw new InvalidCredential("Invalid Password");
-//            }
 
             return employee;
         }
+
+    /**
+     * Password reset
+     * @param employee
+     * @throws MessagingException
+     * @throws UnsupportedEncodingException
+     */
+    public void passwordReset(Employee employee) throws MessagingException, UnsupportedEncodingException {
+        Employee existedEmployee = employeeRepository.findByEmail(employee.getEmail());
+        if(existedEmployee == null) {
+            throw new UserNotFoundException("User with email " + employee.getEmail()+ " not found!");
+        }
+        Random random = new Random();
+        String randomCode = String.valueOf(random.nextInt(9999999));
+        existedEmployee.setPassword(randomCode);
+
+
+        emailSenderService.sendPasswordReset(existedEmployee);
+        employeeRepository.save(existedEmployee);
+
+
+    }
 
     /**
      * update employee detail , the employee should not be able to update manager id and leave

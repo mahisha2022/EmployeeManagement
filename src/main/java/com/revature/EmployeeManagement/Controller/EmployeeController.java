@@ -4,11 +4,13 @@ import com.revature.EmployeeManagement.Exception.InvalidCredential;
 import com.revature.EmployeeManagement.Exception.UserNotFoundException;
 import com.revature.EmployeeManagement.Model.Employee;
 import com.revature.EmployeeManagement.Service.EmployeeService;
+import jakarta.mail.MessagingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 import java.util.Optional;
 
@@ -36,6 +38,10 @@ public class EmployeeController {
             return ResponseEntity.ok("Employee registered successfully");
         }catch (InvalidCredential e){
             return ResponseEntity.badRequest().body(e.getMessage());
+        } catch (MessagingException e) {
+            throw new RuntimeException(e);
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -53,6 +59,29 @@ public class EmployeeController {
             return ResponseEntity.ok(employeeLogin);
         } catch (UserNotFoundException e){
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid email or password");
+        }
+    }
+
+    /**
+     * Password reset
+     * ENDPOINT POST localhost:9000/revWorkforce/password-reset
+     * @param employee
+     * @return
+     * @throws MessagingException
+     * @throws UnsupportedEncodingException
+     */
+
+    @PostMapping("/password-reset")
+    public ResponseEntity<String> passwordReset(@RequestBody Employee employee )throws MessagingException, UnsupportedEncodingException {
+        try {
+            employeeService.passwordReset(employee);
+            return ResponseEntity.ok("password reset email sent");
+        }catch (InvalidCredential e){
+            return ResponseEntity.badRequest().body(e.getMessage());
+        } catch (MessagingException e) {
+            throw new RuntimeException(e);
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException(e);
         }
     }
 
