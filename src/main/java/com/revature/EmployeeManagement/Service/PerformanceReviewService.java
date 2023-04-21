@@ -44,7 +44,7 @@ public class PerformanceReviewService {
         //Get goal by goalId
         Goal goal = goalRepository.findById(goalId).orElseThrow(() -> new IndexOutOfBoundsException("Goal not found"));
         //set the Goal entity
-        if (goal.getStatus().equalsIgnoreCase("Accepted")){
+        if (goal.getStatus().equalsIgnoreCase("Completed")){
             performanceReview.setGoal(goal);
 
 //        performanceReview.setEmployee(goal.getEmployees());
@@ -185,7 +185,10 @@ public class PerformanceReviewService {
         return  performanceReviewRepository.findByGoalEmployeeId(employeeId);
     }
 
-
+    public List<PerformanceReview> getReviewsByEmployee(long employeeId){
+        List<PerformanceReview> performanceReviews = performanceReviewRepository.findByGoalEmployeeIdList(employeeId);
+        return performanceReviews;
+    }
 
 }
 
