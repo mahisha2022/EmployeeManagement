@@ -142,7 +142,7 @@ public class PerformanceReviewController {
      */
 
     @GetMapping("employee/{employeeId}")
-    public PerformanceReview getPerformanceByEmployee(@PathVariable long employeeId){
+    public List<PerformanceReview> getPerformanceByEmployee(@PathVariable long employeeId){
         return performanceReviewService.getPerformanceReviewByEmployee(employeeId);
     }
 
