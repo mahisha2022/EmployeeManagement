@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -103,8 +104,8 @@ public class MeetingService {
         if (meeting == null){
             throw new InvalidCredential("Meeting not found");
         }
-        LocalDate today = LocalDate.now();
-        LocalDate startDate = meeting.getStartTime();
+        LocalDateTime today = LocalDateTime.now();
+        LocalDateTime startDate = meeting.getStartTime();
         if (meeting.getStartTime().isBefore(today)){
             throw new InvalidCredential("Meeting date and time already passed!");
         }
