@@ -90,7 +90,7 @@ public class EmployeeService {
 
         //Send verification email
 
-        emailSenderService.sendAccountRegistrationEmail(employee);
+//        emailSenderService.sendAccountRegistrationEmail(employee);
 
 
         return employeeRepository.save(employee);

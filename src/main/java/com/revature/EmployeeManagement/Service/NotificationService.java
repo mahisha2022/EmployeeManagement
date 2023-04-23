@@ -6,6 +6,8 @@ import com.revature.EmployeeManagement.Model.Notification;
 import com.revature.EmployeeManagement.Repositoty.EmployeeRepository;
 import com.revature.EmployeeManagement.Repositoty.NotificationRepository;
 import com.revature.EmployeeManagement.Repositoty.LeaveRepository;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import org.aspectj.weaver.ast.Not;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,6 +17,8 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@AllArgsConstructor
+@NoArgsConstructor
 public class NotificationService {
     @Autowired
     private NotificationRepository notificationRepository;
@@ -22,44 +26,66 @@ public class NotificationService {
     private EmployeeRepository employeeRepository;
 
 
-    public List<Notification> getAllNotifications(){
-        return notificationRepository.findAll();
+    /**
+     * Send notification to employee
+     * @param employeeId
+     * @param message
+     */
+
+    public void submitNotificationToEmployee(Long employeeId, String message){
+
+        Notification notification = new Notification();
+        Employee employee = employeeRepository.findById(employeeId).get();
+        notification.setEmployee(employee);
+        notification.setMessage(message);
+        notificationRepository.save(notification);
+
     }
+
+    /**
+     * Send notification to manager
+     * @param managerId
+     * @param message
+     */
+    public void submitNotificationToManager(Long managerId, String message){
+        Employee manager = employeeRepository.findById(managerId).orElse(null);
+        if (manager != null && manager.getIsManager() == 1){
+            Notification notification = new Notification();
+            notification.setMessage(message);
+            notification.setEmployee(manager);
+            notificationRepository.save(notification);
+        }
+
+
+    }
+
+    /**
+     * Get notification by manager
+     * @param managerId
+     * @return
+     */
+
+    public List<Notification> getNotificationByManager(Long managerId){
+       return notificationRepository.findByEmployeeId(managerId);
+    }
+
+    /**
+     * Get Notification by Employee
+     * @param employee
+     * @return
+     */
 
     public List<Notification> getNotificationByEmployee(Employee employee){
         return notificationRepository.findByEmployee(employee);
     }
-    public Notification getNotificationById(long id){
-        return notificationRepository.findById(id).get();
-    }
 
-    public Notification submitNotificationToManager(Notification notification, Employee employee){
-        if (employee.getId() != null){
-            Notification employeeNotification = new Notification();
-            employeeNotification.setMessage(notification.getMessage());
-            employeeNotification.setEmployee(employee);
-//        employeeNotification.setEmployeeId(employee.getId());
-            notificationRepository.save(employeeNotification);
-            return employeeNotification;
-        }
+    /**
+     * Get all notification
+     * @return
+     */
 
-        if(employee.getManagerId() != null){
-            Notification managerNotification = new Notification();
-            managerNotification.setMessage(notification.getMessage());
-            managerNotification.setManagerId(employee.getManagerId());
-//            managerNotification.setManagerId(employee.getManager().getId());
-            notificationRepository.save(managerNotification);
-            return managerNotification;
-        }
-        return notification;
-
-    }
-    public List<Notification> getNotificationByManager(Long managerId){
-        return  notificationRepository.findByManagerId(managerId);
-    }
-
-    public List<Notification> getNotificationByEmployee(Long employeeId){
-        return notificationRepository.findByEmployeeId(employeeId);
+    public List<Notification> getAllNotifications() {
+        return notificationRepository.findAll();
     }
 
 

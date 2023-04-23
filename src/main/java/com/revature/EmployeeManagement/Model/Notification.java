@@ -25,8 +25,7 @@ public class Notification {
     @Column(insertable=false, updatable=false)
     private Long employeeId;
 
-    @Column(insertable=false, updatable=false)
-    private Long managerId;
+
 
 
 }
