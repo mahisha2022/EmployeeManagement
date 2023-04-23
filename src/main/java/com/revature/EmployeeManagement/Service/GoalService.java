@@ -57,12 +57,10 @@ public class GoalService {
         employeeRepository.save(employee);
 
 
-        //send notification here
+        //send notification to Employee here
 
-        Notification employeeNotification = new Notification();
-        employeeNotification.setEmployee(employee);
-        employeeNotification.setMessage(employee.getFirstName() + ", you have new goal assigned. Please review.");
-        notificationRepository.save(employeeNotification);
+        String messageToEmployee = "New goal Assigned to you. Please review ";
+        notificationService.submitNotificationToEmployee(employeeId, messageToEmployee);;
 
 
         return savedGoal;
@@ -84,13 +82,13 @@ public class GoalService {
         //set the status to "accepted
         goal.setStatus("Accepted");
 
-        //send notification here
-        Notification employeeNotification = new Notification();
-        employeeNotification.setEmployee(goal.getEmployees());
-//        employeeNotification.setManagerId(goal.getEmployees().getManagerId());
-        employeeNotification.setMessage(goal.getEmployees().getFirstName() + ", have accepted the assigned goal " + goal.getName() );
-        notificationRepository.save(employeeNotification);
+        //send notification to manager here
 
+        Employee employee = goal.getEmployees();
+        Long managerId = employee.getManagerId();
+        String messageToManager = goal.getEmployees().getFirstName() + ", " + goal.getEmployees().getLastName()
+                +" accepted the assigned goal  " + goal.getName() + ", deadline: " + goal.getDeadline();
+        notificationService.submitNotificationToManager(managerId, messageToManager );
 
         return goalRepository.save(goal);
 
@@ -135,15 +133,13 @@ public class GoalService {
         goal.setStatus("Returned back for a review");
 
 
-        //send notification here
-        Notification employeeNotification = new Notification();
-        employeeNotification.setEmployee(goal.getEmployees());
-//        employeeNotification.setManagerId(goal.getEmployees().getManagerId());
-        employeeNotification.setMessage(goal.getEmployees().getFirstName() + ", have returned the assigned goal " + goal.getName() +
-                " back. Please review");
-        notificationRepository.save(employeeNotification);
+        //send notification to manager here
+        Employee employee = goal.getEmployees();
+        Long managerId = employee.getManagerId();
+        String messageToManager = goal.getEmployees().getFirstName() + ", " + goal.getEmployees().getLastName()
+                +" returned back the assigned " + goal.getName() + "goal back for more considerations, please review";
+        notificationService.submitNotificationToManager(managerId, messageToManager);
 
-        //save the negotiated goal into repository
         return goalRepository.save(goal);
     }
 
@@ -166,10 +162,14 @@ public class GoalService {
             existedGoal.setDescription(goal.getDescription());
             existedGoal.setComments(goal.getComments());
 
-            // save the updated goal
+            //send notification to employee here
+            Long employeeId = existedGoal.getEmployeeId();
+            String messageToEmployee = "New goal Assigned to you. Please review ";
+            notificationService.submitNotificationToEmployee(employeeId, messageToEmployee);;
+
+
             return goalRepository.save(existedGoal);
 
-            //send notification here
         }
         else {
             throw new InvalidCredential("Accepted Goal cannot be updated!");

@@ -31,6 +31,8 @@ public class PerformanceReviewService {
     private GoalRepository goalRepository;
     @Autowired
     private EmployeeRepository employeeRepository;
+    @Autowired
+    private NotificationService notificationService;
 
 
     /**
@@ -56,8 +58,13 @@ public class PerformanceReviewService {
             goal.setPerformanceReviews(performanceReview);
             performanceReviewRepository.save(performanceReview);
 
-            //add the performance entity to the performance review list in the goal entity
-//        goal.getPerformanceReviews().add(performanceReview);
+            //send notification to employee here
+
+            Long managerId = goal.getEmployees().getManagerId();
+            String messageToManager = goal.getEmployees().getFirstName() + " " + goal.getEmployees().getLastName() +
+                    " requested a performance review. Please review.";
+            notificationService.submitNotificationToEmployee(managerId, messageToManager );
+
             goalRepository.save(goal);}
         else {
             throw new InvalidCredential("Goal is not accepted or on pending. Please check the status.");
@@ -106,6 +113,13 @@ public class PerformanceReviewService {
             performance.setManagerFeedback(updatedPerformance.getManagerFeedback());
             performance.setScore(updatedPerformance.getScore());
             performanceReviewRepository.save(performance);
+
+            //send notification to employee here
+
+            Employee employee = performance.getGoal().getEmployees();
+            Long employeeId = employee.getId();
+            String messageToEmployee = "There is a new performance review for your completed goal" + performance.getGoal().getName();
+            notificationService.submitNotificationToEmployee(employeeId, messageToEmployee);
 
         } else {
             throw new InvalidCredential("Performance not found");
@@ -181,8 +195,8 @@ public class PerformanceReviewService {
      * @return
      */
 
-    public PerformanceReview getPerformanceReviewByEmployee(Long employeeId){
-        return  performanceReviewRepository.findByGoalEmployeeId(employeeId);
+    public List<PerformanceReview> getPerformanceReviewByEmployee(Long employeeId){
+        return  performanceReviewRepository.findByGoalEmployeeIdList(employeeId);
     }
 
     public List<PerformanceReview> getReviewsByEmployee(long employeeId){

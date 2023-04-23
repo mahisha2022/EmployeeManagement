@@ -90,16 +90,10 @@ public class LeaveService {
 
         //Notify Manager here
 
-        Employee employee1 = newLeave.getEmployee();
-        Long managerId = leave.getEmployee().getManagerId();
-        Notification employeeNotification = new Notification();
-        employeeNotification.setEmployee(employee);
-        employeeNotification.setManagerId(managerId);
-        employeeNotification.setMessage(employee1.getFirstName() + " "+ employee1.getLastName() +" have requested a leave from " + leave.getStartDate() +
-                " to " + leave.getEndDate() + ". Please review the request!");
-
-        employee1.getLeaves().add(leave);
-        notificationRepository.save(employeeNotification);
+        Long managerId = employee.getManagerId();
+        String messageToManager = employee.getFirstName() + " " + employee.getLastName() +
+                " submitted a new leave request, please review";
+        notificationService.submitNotificationToManager(managerId, messageToManager );
 
 
         return newLeave;
@@ -169,10 +163,10 @@ public class LeaveService {
             //Sent notification to employee
 
             Employee employee = submittedLeave.getEmployee();
-            Notification employeeNotification = new Notification();
-            employeeNotification.setEmployee(employee);
-            employeeNotification.setMessage("Congratulations! your leave request from : " + submittedLeave.getStartDate()  + " to " + submittedLeave.getEndDate() + " is Approved!");
-            notificationRepository.save(employeeNotification);
+            Long employeeId = employee.getId();
+            String messageToEmployee = "Congratulations! your leave request from : " + submittedLeave.getStartDate()  + " to " + submittedLeave.getEndDate() + " is Approved!";
+            notificationService.submitNotificationToEmployee(employeeId, messageToEmployee);
+
         }else {
             throw new InvalidCredential("It has been approved or rejected");
         }
@@ -196,10 +190,10 @@ public class LeaveService {
             //Send Notification to employee
 
             Employee employee = submittedLeave.getEmployee();
-            Notification employeeNotification = new Notification();
-            employeeNotification.setEmployee(employee);
-            employeeNotification.setMessage("Your leave request from : " + submittedLeave.getStartDate()  + " to " + submittedLeave.getEndDate() + " is not Approved");
-            notificationRepository.save(employeeNotification);
+            Long employeeId = employee.getId();
+            String messageToEmployee = "your leave request from : " + submittedLeave.getStartDate()  + " to " + submittedLeave.getEndDate() + " is not approved!" +
+                    "Reason: " + feedback;
+            notificationService.submitNotificationToEmployee(employeeId, messageToEmployee);
 
 
         }
