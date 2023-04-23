@@ -21,9 +21,9 @@ public class Meeting{
     @Column
     private String subject ;
     @Column
-    private LocalDate startTime;
+    private LocalDateTime startTime;
     @Column
-    private LocalDate endTime;
+    private LocalDateTime endTime;
     @Column
     private String description;
 

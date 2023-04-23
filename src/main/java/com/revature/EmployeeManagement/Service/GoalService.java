@@ -95,6 +95,30 @@ public class GoalService {
     }
 
     /**
+     * Method to complete a goal
+     * @param goalId
+     * @return
+     */
+
+    public Goal completeGoal(Long goalId){
+        //retrieve the goal from the goal repository
+        Goal goal = goalRepository.findById(goalId).get();
+        //set the status to "completed"
+        goal.setStatus("Completed");
+
+        //send notification here
+        Notification employeeNotification = new Notification();
+        employeeNotification.setEmployee(goal.getEmployees());
+//        employeeNotification.setManagerId(goal.getEmployees().getManagerId());
+        employeeNotification.setMessage(goal.getEmployees().getFirstName() + ", have completed the assigned goal " + goal.getName() );
+        notificationRepository.save(employeeNotification);
+
+
+        return goalRepository.save(goal);
+
+    }
+
+    /**
      * Method to let employee negotiate about the assigned goal
      * @param goalId
      * @param comments

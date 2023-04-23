@@ -146,7 +146,10 @@ public class PerformanceReviewController {
         return performanceReviewService.getPerformanceReviewByEmployee(employeeId);
     }
 
-
+    @GetMapping("reviews/{employeeId}")
+    public List<PerformanceReview> getReviewsByEmployee(@PathVariable long employeeId){
+        return performanceReviewService.getReviewsByEmployee(employeeId);
+    }
 
     @ExceptionHandler(InvalidCredential.class)
     public ResponseEntity<String > handleResourceNotFoundExceptions(InvalidCredential e){
