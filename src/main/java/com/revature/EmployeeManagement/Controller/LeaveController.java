@@ -46,6 +46,8 @@ public class LeaveController {
         return ResponseEntity.badRequest().body(e.getMessage());
     }
     }
+    @GetMapping("")
+    public List<Leave> getAllLeaves(){return leaveService.getAllLeaves();}
 
 
     /**
