@@ -52,9 +52,6 @@ This method retrieves all reviews that have been written about every single empl
         List<PerformanceReview> performanceReviews = performanceReviewService.getAllPerformanceReviews();
         return new ResponseEntity<>(performanceReviews, HttpStatus.OK);
     }
-/*
-This method for update is not working correctly, although it is a start it is not properly updating
- */
     @PatchMapping("/update/{reviewId}")
     public ResponseEntity<PerformanceReview> updatePerformanceReview(@RequestBody PerformanceReview performanceReview, @PathVariable long reviewId) {
         performanceReview.setReviewNumber(reviewId);
