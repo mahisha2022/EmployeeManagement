@@ -66,6 +66,16 @@ public class NotificationController {
         return notificationService.getNotificationByEmployee(employee);
     }
 
+    @DeleteMapping("/{notificationId}")
+    public ResponseEntity<?> deleteNotification(@PathVariable long notificationId){
+       try {
+           notificationService.deleteNotification(notificationId);
+           return ResponseEntity.ok("Notification deleted successfully");
+       }
+       catch (InvalidCredential e){
+           return ResponseEntity.badRequest().body(e.getMessage());
+       }
+    }
 
 
     @ExceptionHandler(InvalidCredential.class)
