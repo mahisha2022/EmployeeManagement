@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.security.PublicKey;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -217,5 +218,24 @@ public class GoalService {
         return goalRepository.findById(goalId).get();
     }
 
+    public List<Goal> getAllGoalForFellowEmployees(long managerId){
+        //get the manager first
+        Employee manager = employeeRepository.findById(managerId).get();
+        //get all employees reported to the manager
+        if (manager != null) {
+            List<Employee> employees = employeeRepository.findByManagerId(manager.getId());
+            //get the goals assigned to those employees
+            List<Goal> goals = new ArrayList<>();
+            for (Employee e : employees) {
+                List<Goal> fellowEmployeeGoals = goalRepository.findByEmployeeId(e.getId());
+                goals.addAll(fellowEmployeeGoals);
+            }
+            return goals;
+        }
+        else {
+            throw new InvalidCredential("Manager Id Not Found");
+        }
+
+    }
 
 }

@@ -25,6 +25,7 @@ public class Goal {
     private int weightage;
     private String comments;
     private String status;
+    private String fellowEmpComments;
     private int personal;
 
 
