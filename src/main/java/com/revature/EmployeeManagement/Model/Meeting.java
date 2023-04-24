@@ -6,6 +6,7 @@ import lombok.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 @Entity
 @Data
@@ -21,9 +22,11 @@ public class Meeting{
     @Column
     private String subject ;
     @Column
-    private LocalDateTime startTime;
+    private LocalDate startDate;
     @Column
-    private LocalDateTime endTime;
+    private LocalTime startTime;
+    @Column
+    private LocalTime endTime;
     @Column
     private String description;
 
