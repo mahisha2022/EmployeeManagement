@@ -60,10 +60,11 @@ public class PerformanceReviewService {
 
             //send notification to employee here
 
-            Long managerId = goal.getEmployees().getManagerId();
+            Employee employee = goal.getEmployees();
+            Long managerId = employee.getManagerId();
             String messageToManager = goal.getEmployees().getFirstName() + " " + goal.getEmployees().getLastName() +
                     " requested a performance review. Please review.";
-            notificationService.submitNotificationToEmployee(managerId, messageToManager );
+            notificationService.submitNotificationToManager(managerId, messageToManager );
 
             goalRepository.save(goal);}
         else {

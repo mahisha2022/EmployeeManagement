@@ -58,6 +58,7 @@ public class GoalService {
         employeeRepository.save(employee);
 
 
+
         //send notification to Employee here
 
         String messageToEmployee = "New goal Assigned to you. Please review ";
@@ -85,11 +86,16 @@ public class GoalService {
 
         //send notification to manager here
 
-        Employee employee = goal.getEmployees();
-        Long managerId = employee.getManagerId();
-        String messageToManager = goal.getEmployees().getFirstName() + ", " + goal.getEmployees().getLastName()
-                +" accepted the assigned goal  " + goal.getName() + ", deadline: " + goal.getDeadline();
-        notificationService.submitNotificationToManager(managerId, messageToManager );
+        if (!goal.isNotificationSent()) {
+            Employee employee = goal.getEmployees();
+            Long managerId = employee.getManagerId();
+            String messageToManager = goal.getEmployees().getFirstName() + ", " + goal.getEmployees().getLastName()
+                    + " accepted the assigned goal  " + goal.getName() + ", deadline: " + goal.getDeadline();
+            notificationService.submitNotificationToManager(managerId, messageToManager);
+            goal.setNotificationSent(true);
+
+        }
+
 
         return goalRepository.save(goal);
 
@@ -107,12 +113,17 @@ public class GoalService {
         //set the status to "completed"
         goal.setStatus("Completed");
 
-        //send notification here
-        Notification employeeNotification = new Notification();
-        employeeNotification.setEmployee(goal.getEmployees());
-//        employeeNotification.setManagerId(goal.getEmployees().getManagerId());
-        employeeNotification.setMessage(goal.getEmployees().getFirstName() + ", have completed the assigned goal " + goal.getName() );
-        notificationRepository.save(employeeNotification);
+
+
+            //send notification here
+        //this notification is sending multiple notifications for one completed gaol
+//                Employee employee = goal.getEmployees();
+//                Long managerId = employee.getManagerId();
+//                String messageToManager = goal.getEmployees().getFirstName() + ", " + goal.getEmployees().getLastName()
+//                        + " completed the assigned " + goal.getName() + ".";
+//                notificationService.submitNotificationToManager(managerId, messageToManager);
+
+
 
 
         return goalRepository.save(goal);
@@ -135,11 +146,14 @@ public class GoalService {
 
 
         //send notification to manager here
-        Employee employee = goal.getEmployees();
-        Long managerId = employee.getManagerId();
-        String messageToManager = goal.getEmployees().getFirstName() + ", " + goal.getEmployees().getLastName()
-                +" returned back the assigned " + goal.getName() + "goal back for more considerations, please review";
-        notificationService.submitNotificationToManager(managerId, messageToManager);
+        if (!goal.isNotificationSent()) {
+            Employee employee = goal.getEmployees();
+            Long managerId = employee.getManagerId();
+            String messageToManager = goal.getEmployees().getFirstName() + ", " + goal.getEmployees().getLastName()
+                    + " returned back the assigned " + goal.getName() + "goal back for more considerations, please review";
+            notificationService.submitNotificationToManager(managerId, messageToManager);
+            goal.setNotificationSent(true);
+        }
 
         return goalRepository.save(goal);
     }
@@ -165,7 +179,7 @@ public class GoalService {
 
             //send notification to employee here
             Long employeeId = existedGoal.getEmployeeId();
-            String messageToEmployee = "New goal Assigned to you. Please review ";
+            String messageToEmployee = "You have new updated goal. Please review ";
             notificationService.submitNotificationToEmployee(employeeId, messageToEmployee);;
 
 
@@ -218,6 +232,12 @@ public class GoalService {
         return goalRepository.findById(goalId).get();
     }
 
+
+    /**
+     * Get list of fellow employees assigned goal
+     * @param managerId
+     * @return
+     */
     public List<Goal> getAllGoalForFellowEmployees(long managerId){
         //get the manager first
         Employee manager = employeeRepository.findById(managerId).get();

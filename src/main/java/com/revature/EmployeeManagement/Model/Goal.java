@@ -27,6 +27,7 @@ public class Goal {
     private String status;
     private String fellowEmpComments;
     private int personal;
+    private boolean notificationSent;
 
 
     @ManyToOne(fetch = FetchType.EAGER)
@@ -40,4 +41,9 @@ public class Goal {
     @OneToOne(mappedBy = "goal", cascade = CascadeType.ALL)
     @JsonManagedReference
     private PerformanceReview performanceReviews;
+
+//    public boolean isNotificationSent(){
+//        return notificationSent;
+//    }
+
 }
