@@ -11,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -39,6 +41,16 @@ public class MeetingService {
         Employee employee = employeeOptional.get();
         if (employee == null) {
             throw new InvalidCredential("Employee not found");
+        }
+
+        //check if there is no meeting requested for the employee on the same time
+        LocalDate startDate = meeting.getStartDate();
+        LocalTime startTime = meeting.getStartTime();
+        LocalTime endTime = meeting.getEndTime();
+        List<Meeting> existedMeetings = meetingRepository.findByEmployeeIdAndStartDateAndStartTimeBetween(employeeId, startDate, startTime, endTime);
+        if (!existedMeetings.isEmpty()){
+            throw new InvalidCredential("There is already a meeting requested to " + employee.getFirstName() + " "+
+                    employee.getLastName() + " at the given time.");
         }
 
         meeting.setEmployee(employee);
@@ -103,8 +115,8 @@ public class MeetingService {
         if (meeting == null){
             throw new InvalidCredential("Meeting not found");
         }
-        LocalDate today = LocalDate.now();
-        LocalDate startDate = meeting.getStartTime();
+        LocalTime today = LocalTime.now();
+        LocalTime startDate = meeting.getStartTime();
         if (meeting.getStartTime().isBefore(today)){
             throw new InvalidCredential("Meeting date and time already passed!");
         }

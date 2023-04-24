@@ -89,6 +89,22 @@ public class GoalController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to update goal. Please try again later");
         }
     }
+
+    @PostMapping("/{goalId}/complete")
+    public ResponseEntity<String> completeGoal(@PathVariable long goalId){
+        try {
+            goalService.completeGoal(goalId);
+            return ResponseEntity.ok("Goal " + goalService.acceptGoal(goalId).getName() + " deadline: " +
+                    goalService.completeGoal(goalId).getDeadline() + " successfully completed!");
+        }
+        catch (InvalidCredential e){
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+        catch (Exception e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to accept goal. Please try again later");
+        }
+
+    }
 //    For Testing
 
     /**

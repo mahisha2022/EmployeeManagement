@@ -35,4 +35,8 @@ public class Goal {
 
     @Column(name = "employeeId", insertable = false, updatable = false)
     private long employeeId;
+
+    @OneToOne(mappedBy = "goal", cascade = CascadeType.ALL)
+    @JsonManagedReference
+    private PerformanceReview performanceReviews;
 }

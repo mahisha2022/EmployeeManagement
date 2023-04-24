@@ -40,32 +40,9 @@ public class AdminController {
         } catch (AdminNotFoundException e) {
             return ResponseEntity.notFound().build();
         }
+
+
     }
-
-    @PostMapping("/createProfile")
-    public ResponseEntity<String> createProfile(@RequestBody Employee employee) {
-        try {
-            employeeService.createProfile(employee);
-            return ResponseEntity.ok(employee.getIsManager() == 1 ? "Manager profile created successfully" : "Employee profile created successfully");
-        } catch (InvalidCredential e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
-    }
-
-
-    @GetMapping("/leaves")
-    public ResponseEntity<List<Leave>> getAllLeaves() {
-        List<Leave> leaves = employeeService.getAllLeaves();
-        return ResponseEntity.ok(leaves);
-    }
-
-
-    @DeleteMapping("/delete/employee/{employeeId}")
-    public ResponseEntity<Void> deleteEmployee(@PathVariable long employeeId) {
-        employeeService.deleteEmployeeById(employeeId);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-    }
-
 }
 
 
