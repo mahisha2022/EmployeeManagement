@@ -1,5 +1,6 @@
 package com.revature.EmployeeManagement.Service;
 
+import com.revature.EmployeeManagement.Exception.InvalidCredential;
 import com.revature.EmployeeManagement.Model.Employee;
 import com.revature.EmployeeManagement.Model.Leave;
 import com.revature.EmployeeManagement.Model.Notification;
@@ -89,4 +90,18 @@ public class NotificationService {
     }
 
 
+    /**
+     * Delete notification by Id
+     * @param notificationId
+     */
+    public void deleteNotification(long notificationId){
+        Optional<Notification> notificationOptional = notificationRepository.findById(notificationId);
+        Notification notification = notificationOptional.get();
+        if (notification != null){
+            notificationRepository.delete(notification);
+        }
+        else {
+            throw new InvalidCredential("Notification not found");
+        }
+    }
 }
