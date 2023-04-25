@@ -140,6 +140,10 @@ public class GoalController {
     public List<Goal> getFellowEmployeesGoal(@PathVariable long managerId){
        return goalService.getAllGoalForFellowEmployees(managerId);
     }
+    @GetMapping("{employeeId}")
+    public ResponseEntity<List<Goal>> getGoalByEmployee(@PathVariable long employeeId) {
+        return new ResponseEntity<>(goalService.getGoalByEmployee(employeeId), HttpStatus.OK);
+    }
 
 
 
