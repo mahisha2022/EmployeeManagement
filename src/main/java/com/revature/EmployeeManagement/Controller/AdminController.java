@@ -2,6 +2,7 @@ package com.revature.EmployeeManagement.Controller;
 
 import com.revature.EmployeeManagement.Exception.AdminNotFoundException;
 import com.revature.EmployeeManagement.Exception.InvalidCredential;
+import com.revature.EmployeeManagement.Exception.UserNotFoundException;
 import com.revature.EmployeeManagement.Model.Admin;
 import com.revature.EmployeeManagement.Model.Employee;
 import com.revature.EmployeeManagement.Model.Leave;
@@ -16,6 +17,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/admin")
+@CrossOrigin("*")
 public class AdminController {
     private final AdminService adminService;
     private final EmployeeService employeeService;
@@ -26,11 +28,36 @@ public class AdminController {
         this.employeeService = employeeService;
     }
 
+    /**
+     * Create admin
+     * ENDPOINT POST localhost:9000/admin/createAdmin
+     * @param admin
+     * @return
+     */
+
     @PostMapping("/createAdmin")
     public ResponseEntity<Admin> createAdmin(@RequestBody Admin admin) {
         Admin newAdmin = adminService.createAdmin(admin);
         return ResponseEntity.status(HttpStatus.CREATED).body(newAdmin);
     }
+
+    /**
+     * Admin login
+     * ENDPOINT localhost:9000/admin/login
+     * @param admin
+     * @return
+     */
+    @PostMapping("/login")
+    public ResponseEntity<?> adminLogin(@RequestBody Admin admin){
+        try {
+            Admin adminLogin = adminService.adminLogin(admin.getUsername(), admin.getPassword());
+            return ResponseEntity.ok(adminLogin);
+        }
+        catch (InvalidCredential e){
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid email or password");
+        }
+    }
+
 
     @GetMapping("/{username}")
     public ResponseEntity<Admin> getAdminByUsername(@PathVariable String username) {
@@ -41,8 +68,13 @@ public class AdminController {
             return ResponseEntity.notFound().build();
         }
 
-
     }
+
+    @ExceptionHandler(InvalidCredential.class)
+    public ResponseEntity<String > handleResourceNotFoundExceptions(InvalidCredential e){
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("The requested resource not Found");
+    }
+
 }
 
 
