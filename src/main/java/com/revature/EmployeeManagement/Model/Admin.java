@@ -23,6 +23,8 @@ public class Admin {
 
     @Column(nullable = false)
     private String username;
+    @Column(nullable = false)
+    private String email;
 
     @Column(nullable = false)
     private String password;
