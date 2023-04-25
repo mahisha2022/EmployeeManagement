@@ -88,6 +88,20 @@ public class GoalController {
         }
     }
 
+    @PatchMapping("/{goalId}/comment")
+    public ResponseEntity<String> updateGoalComments(@PathVariable Long goalId, @RequestBody String comment){
+        try {
+            goalService.updateGoalComment(goalId, comment);
+            return ResponseEntity.ok("Comment added successfully");
+        }
+        catch (InvalidCredential e){
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+        catch (Exception e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to update goal. Please try again later");
+        }
+    }
+
     @PostMapping("/{goalId}/complete")
     public ResponseEntity<String> completeGoal(@PathVariable long goalId){
         try {

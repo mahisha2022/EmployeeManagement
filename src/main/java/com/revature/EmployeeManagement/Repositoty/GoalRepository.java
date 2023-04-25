@@ -19,8 +19,8 @@ public interface GoalRepository extends JpaRepository<Goal, Long> {
 
     List<Goal> findByEmployeeId(long employeeId);
 
-
-    List<Goal> findByEmployees_ManagerId(long employeeId);
+    //@Query("from Goal where employeeId = :employeeId and personal = :personal")
+    List<Goal> findByEmployees_ManagerIdAndPersonal(long employeeId, long personal);
 
     void deleteByEmployeeId(Long employeeId);
 

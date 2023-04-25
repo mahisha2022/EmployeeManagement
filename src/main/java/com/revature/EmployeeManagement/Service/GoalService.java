@@ -190,6 +190,29 @@ public class GoalService {
             throw new InvalidCredential("Accepted Goal cannot be updated!");
         }
     }
+
+    public Goal updateGoalComment(Long goalId, String comment){
+        //retrieve the goal from the repository
+        Goal existedGoal = goalRepository.findById(goalId).get();
+
+        //update the goal
+        if(existedGoal.getStatus() == "Completed") {
+            existedGoal.setComments(existedGoal.getComments()+", "+comment);
+
+            //send notification to employee here
+            Long employeeId = existedGoal.getEmployeeId();
+            String messageToEmployee = "You have new suggestions to a completed goal. Please review ";
+            notificationService.submitNotificationToEmployee(employeeId, messageToEmployee);;
+
+
+            return goalRepository.save(existedGoal);
+
+        }
+        else {
+            throw new InvalidCredential("Accepted Goal cannot be updated!");
+        }
+    }
+
 //    For Testing
     public List<Goal> getGoals() {
         return goalRepository.findAll();
@@ -212,7 +235,7 @@ public class GoalService {
      * @return
      */
     public List<Goal> getGoalByManagerId(long managerId){
-        return goalRepository.findByEmployees_ManagerId(managerId);
+        return goalRepository.findByEmployees_ManagerIdAndPersonal(managerId, 1);
     }
 
     /**
@@ -247,7 +270,7 @@ public class GoalService {
             //get the goals assigned to those employees
             List<Goal> goals = new ArrayList<>();
             for (Employee e : employees) {
-                List<Goal> fellowEmployeeGoals = goalRepository.findByEmployeeId(e.getId());
+                List<Goal> fellowEmployeeGoals = goalRepository.findByEmployeeId(e.getId(), 1);
                 goals.addAll(fellowEmployeeGoals);
             }
             return goals;
