@@ -49,4 +49,9 @@ public class Employee {
     @JsonManagedReference
     private List<Meeting> meetings;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "admin")
+    @JsonBackReference
+    private Admin admin;
+
 }

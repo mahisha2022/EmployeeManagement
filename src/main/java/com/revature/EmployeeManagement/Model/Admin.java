@@ -2,11 +2,19 @@ package com.revature.EmployeeManagement.Model;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.List;
 
 @Entity
 @Table(name = "admin")
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
 public class Admin {
 
     @Id
@@ -15,6 +23,8 @@ public class Admin {
 
     @Column(nullable = false)
     private String username;
+    @Column(nullable = false)
+    private String email;
 
     @Column(nullable = false)
     private String password;
@@ -22,18 +32,23 @@ public class Admin {
     @Column(nullable = false)
     private int isAdmin;
 
-    @OneToMany(fetch = FetchType.EAGER)
+    @OneToMany(fetch = FetchType.LAZY)
+    @JoinColumn(name = "adminId")
     @JsonManagedReference
-    private List<Leave> leaves;
+    private List<Employee> employee;
 
-    @OneToMany(fetch = FetchType.EAGER)
-    @JsonManagedReference
-    private List<PerformanceReview> performanceReviews;
+//    @OneToMany(fetch = FetchType.EAGER)
+//    @JsonManagedReference
+//    private List<Leave> leaves;
 
-    @OneToMany(fetch = FetchType.EAGER)
-    @JoinColumn(name = "goalId")
-    @JsonManagedReference
-    private List<Goal> goals;
+//    @OneToMany(fetch = FetchType.EAGER)
+//    @JsonManagedReference
+//    private List<PerformanceReview> performanceReviews;
+//
+//    @OneToMany(fetch = FetchType.EAGER)
+//    @JoinColumn(name = "goalId")
+//    @JsonManagedReference
+//    private List<Goal> goals;
 
-    // Getters and setters
+
 }
