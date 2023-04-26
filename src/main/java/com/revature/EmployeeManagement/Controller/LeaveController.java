@@ -163,8 +163,8 @@ public class LeaveController {
         return ResponseEntity.ok(availableEmployees);
     }
     @PatchMapping("/{leaveId}")
-    public ResponseEntity<String> patchLeaveRequest(@PathVariable Long leaveId) {
-        leaveService.patch
+    public ResponseEntity<Leave> patchLeaveRequest(@PathVariable Long leaveId, @RequestBody Leave leave) {
+        return ResponseEntity.ok(leaveService.patchLeave(leave));
     }
 
 
