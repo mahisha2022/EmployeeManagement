@@ -197,13 +197,7 @@ public class PerformanceReviewService {
      */
 
     public List<PerformanceReview> getPerformanceReviewByEmployee(Long employeeId){
-        return  performanceReviewRepository.findByGoalEmployeeIdList(employeeId);
+        return  performanceReviewRepository.findByGoal_EmployeeId(employeeId);
     }
-
-    public List<PerformanceReview> getReviewsByEmployee(long employeeId){
-        List<PerformanceReview> performanceReviews = performanceReviewRepository.findByGoalEmployeeIdList(employeeId);
-        return performanceReviews;
-    }
-
 }
 

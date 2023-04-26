@@ -12,7 +12,7 @@ public interface PerformanceReviewRepository extends JpaRepository<PerformanceRe
 
     PerformanceReview findByGoalEmployeeId(Long id);
 
-    @Query("FROM PerformanceReview INNER JOIN Goal WHERE employeeId = :id ")
-    List<PerformanceReview> findByGoalEmployeeIdList(Long id);
+    //@Query("FROM PerformanceReview INNER JOIN Goal ON employeeId = :id ")
+    List<PerformanceReview> findByGoal_EmployeeId(Long id);
 
 }

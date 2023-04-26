@@ -200,13 +200,17 @@ public class GoalService {
         Goal existedGoal = goalRepository.findById(goalId).get();
 
         //update the goal
-        if(existedGoal.getStatus() == "Completed") {
-            existedGoal.setComments(existedGoal.getComments()+", "+comment);
+        if(existedGoal.getStatus().equals("Completed") || existedGoal.getStatus().equals("Accepted")) {
+            if(existedGoal.getComments().equals("")){
+                existedGoal.setComments(comment);
+            }else {
+                existedGoal.setComments(existedGoal.getComments() + ", " + comment);
+            }
 
             //send notification to employee here
             Long employeeId = existedGoal.getEmployeeId();
             String messageToEmployee = "You have new suggestions to a completed goal. Please review ";
-            notificationService.submitNotificationToEmployee(employeeId, messageToEmployee);;
+            notificationService.submitNotificationToEmployee(employeeId, messageToEmployee);
 
 
             return goalRepository.save(existedGoal);
