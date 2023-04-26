@@ -162,6 +162,10 @@ public class LeaveController {
         List<Employee> availableEmployees = leaveService.getEmployeeAvailability(managerId, leave);
         return ResponseEntity.ok(availableEmployees);
     }
+    @PatchMapping("/{leaveId}")
+    public ResponseEntity<Leave> patchLeaveRequest(@PathVariable Long leaveId, @RequestBody Leave leave) {
+        return ResponseEntity.ok(leaveService.patchLeave(leave));
+    }
 
 
 

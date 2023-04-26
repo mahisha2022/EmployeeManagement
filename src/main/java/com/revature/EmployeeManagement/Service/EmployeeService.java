@@ -160,6 +160,8 @@ public class EmployeeService {
         employee.setIsManager(updatedEmployee.getIsManager());
         if (updatedEmployee.getManagerId() != null)
         employee.setManagerId(updatedEmployee.getManagerId());
+        if (updatedEmployee.getLeaveBalance() != 0)
+            employee.setLeaveBalance(updatedEmployee.getLeaveBalance());
         return employeeRepository.save(employee);
         }
 

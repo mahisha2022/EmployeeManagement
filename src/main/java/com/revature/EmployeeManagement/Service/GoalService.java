@@ -69,6 +69,10 @@ public class GoalService {
 
     }
 
+    public List<Goal> getGoalByEmployee(Long employeeId) {
+        return goalRepository.findByEmployeeId(employeeId);
+    }
+
 
 
 

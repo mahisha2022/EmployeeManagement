@@ -212,6 +212,20 @@ public class LeaveService {
 
     /**
      * get employee's availability who report to a manager
+     * @param leave
+     * @return
+     */
+    public Leave patchLeave(Leave leave) {
+        Leave temp = leaveRepository.findById(leave.getId()).get();
+        if (leave.getLeaveType() != null) {
+            temp.setLeaveType(leave.getLeaveType());
+        }
+        leaveRepository.save(temp);
+        return temp;
+    }
+
+    /**
+     * get employee's availability who report to a manager
      * @param managerId
      * @param leave
      * @return
