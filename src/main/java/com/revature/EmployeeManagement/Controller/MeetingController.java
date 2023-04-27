@@ -69,7 +69,7 @@ public class MeetingController {
         }
     }
 
-    @DeleteMapping("/meetingId")
+    @DeleteMapping("/{meetingId}")
     public ResponseEntity<String> deleteMeeting(@PathVariable long meetingId){
         try {
             meetingService.cancelMeeting(meetingId);
