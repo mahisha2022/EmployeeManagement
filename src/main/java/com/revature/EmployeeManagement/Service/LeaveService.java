@@ -245,7 +245,7 @@ public class LeaveService {
 
             //check if the employee has any leaves during the given date range
             for (Leave l: leaves){
-                if (!leave.getStatus().equalsIgnoreCase("Approved")){
+                if (!l.getStatus().equalsIgnoreCase("Approved")){
                     isAvailable = false;
                     break;
                 }
