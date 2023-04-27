@@ -201,10 +201,10 @@ public class GoalService {
 
         //update the goal
         if(existedGoal.getStatus().equals("Completed") || existedGoal.getStatus().equals("Accepted")) {
-            if(existedGoal.getComments().equals("")){
-                existedGoal.setComments(comment);
+            if(existedGoal.getFellowEmpComments().equals("")){
+                existedGoal.setFellowEmpComments(comment);
             }else {
-                existedGoal.setComments(existedGoal.getComments() + ", " + comment);
+                existedGoal.setFellowEmpComments(existedGoal.getComments() + ", " + comment);
             }
 
             //send notification to employee here
