@@ -28,9 +28,9 @@ public class HolidayService {
     public void addHolidays(Holiday holiday){
         Holiday newHoliday = new Holiday();
         newHoliday.setName(holiday.getName());
-        holiday.setDays(holiday.getDays());
-        holiday.setType(holiday.getType());
-        holiday.setDates(holiday.getDates());
+        newHoliday.setDays(holiday.getDays());
+        newHoliday.setType(holiday.getType());
+        newHoliday.setDates(holiday.getDates());
         holidayRepository.save(newHoliday);
 
     }
